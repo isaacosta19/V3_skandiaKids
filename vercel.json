@@ -1,0 +1,11 @@
+{
+  "buildCommand": "",
+  "outputDirectory": "V3_Skandia Kids",
+  "framework": "html",
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/Skandia Kids - El Método.dc.html"
+    }
+  ]
+}
