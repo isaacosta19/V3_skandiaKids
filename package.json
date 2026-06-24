@@ -1,0 +1,10 @@
+{
+  "name": "skandia-kids-v3",
+  "version": "3.0.0",
+  "description": "Skandia Kids - El Método (Interactive Financial Parenting)",
+  "private": true,
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "start": "python -m http.server 8000"
+  }
+}
