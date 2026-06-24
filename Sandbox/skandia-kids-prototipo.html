@@ -1,0 +1,2452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skandia Kids — Prototipo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>
+    const s = document.createElement('script');
+    s.src = 'C:\\Users\\jdguevara\\OneDrive - Skandia Colombia\\UX.20\\Github\\SkCo.Fidu.DesignSystem.Lib.UX\\dist\\elements\\browser\\main.js';
+    s.onload = () => window.registerAllSkElements && window.registerAllSkElements();
+    document.head.appendChild(s);
+  </script>
+  <style>
+    /* ===== TOKENS ===== */
+    :root {
+      --color-primary-green-00: #00C73D;
+      --color-primary-green-d01: #03a835;
+      --color-primary-green-l01: #e6faf0;
+      --color-primary-green-l02: #ccf5e0;
+      --color-bg-main: #ffffff;
+      --color-bg-grey-light: #f7f7f7;
+      --color-bg-brand-light: #e6faf0;
+      --color-text-heading: #1a1a1a;
+      --color-text-body-heading-1: #404040;
+      --color-text-body-heading-2: #666666;
+      --color-text-link: #00C73D;
+      --color-stroke-grey-light: #dddddd;
+      --color-stroke-brand: #00C73D;
+      --color-feedback-error-dark: #c0392b;
+      --color-feedback-success-dark: #1e8449;
+      --color-feedback-warning-dark: #e67e22;
+      --color-feedback-info-dark: #1a5276;
+      --color-feedback-warning-bg: #fef9e7;
+      --color-feedback-error-bg: #fdf2f0;
+      --color-feedback-pending-bg: #fff3e0;
+      --color-button-primary-default: #00C73D;
+      --color-button-primary-hover: #03a835;
+      --color-icon-dark: #404040;
+      --color-icon-medium: #666666;
+      --color-neutral-00: #ffffff;
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+      --space-5: 40px;
+      --space-6: 48px;
+      --radius-card: 12px;
+      --radius-btn: 100px;
+      --radius-chip: 100px;
+    }
+
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 16px;
+      color: var(--color-text-body-heading-1);
+      background: #e8eaed;
+      min-height: 100vh;
+    }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif; }
+
+    /* ===== SELECTOR DE FLUJO ===== */
+    #flow-selector {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: #1a1a1a;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    #flow-selector .selector-label {
+      color: #aaa;
+      font-size: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .flow-tab {
+      background: transparent;
+      border: 1.5px solid #444;
+      color: #ccc;
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-family: 'Open Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .flow-tab.active {
+      background: var(--color-primary-green-00);
+      border-color: var(--color-primary-green-00);
+      color: #fff;
+      font-weight: 600;
+    }
+    .flow-tab:hover:not(.active) { border-color: #888; color: #fff; }
+    .screen-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .screen-nav button {
+      background: #333;
+      border: none;
+      color: #ccc;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .screen-nav button:hover { background: #555; }
+    #screen-indicator {
+      color: #888;
+      font-size: 12px;
+      font-family: 'Montserrat', sans-serif;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    /* ===== WRAPPER PRINCIPAL ===== */
+    .prototype-stage {
+      padding-top: 60px;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    /* ===== SHELL MOBILE (adolescente) ===== */
+    .mobile-shell {
+      width: 375px;
+      min-height: 812px;
+      background: var(--color-bg-main);
+      border-radius: 40px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+      overflow: hidden;
+      position: relative;
+      margin: 24px;
+    }
+
+    /* Status bar simulada */
+    .status-bar {
+      height: 44px;
+      background: var(--color-bg-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+      color: var(--color-text-heading);
+    }
+    .status-bar .time { font-size: 15px; font-weight: 700; }
+    .status-bar .icons { display: flex; gap: 4px; align-items: center; font-size: 11px; }
+
+    /* App nav bar Skandia */
+    .app-navbar {
+      background: var(--color-bg-main);
+      border-bottom: 1px solid var(--color-stroke-grey-light);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .skandia-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--color-text-heading);
+      letter-spacing: -0.5px;
+    }
+    .skandia-logo span { color: var(--color-primary-green-00); }
+    .app-navbar .nav-icons { display: flex; gap: 16px; color: var(--color-icon-dark); font-size: 18px; }
+
+    /* Screen container */
+    .screen {
+      display: none;
+      flex-direction: column;
+      min-height: 724px;
+      overflow-y: auto;
+    }
+    .screen.active { display: flex; }
+
+    /* Bottom nav bar */
+    .bottom-nav {
+      position: sticky;
+      bottom: 0;
+      background: var(--color-bg-main);
+      border-top: 1px solid var(--color-stroke-grey-light);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 12px;
+    }
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--color-icon-medium);
+      cursor: pointer;
+    }
+    .bottom-nav-item i { font-size: 20px; }
+    .bottom-nav-item.active { color: var(--color-primary-green-00); }
+
+    /* ===== SHELL DESKTOP (padre) ===== */
+    .desktop-shell {
+      width: 1100px;
+      min-height: 700px;
+      background: var(--color-bg-main);
+      border-radius: 16px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+      overflow: hidden;
+      margin: 24px;
+    }
+    .desktop-topbar {
+      background: var(--color-bg-main);
+      border-bottom: 1px solid var(--color-stroke-grey-light);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .desktop-topbar .logo-area {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .desktop-nav-links {
+      display: flex; gap: 32px;
+    }
+    .desktop-nav-links a {
+      font-size: 14px;
+      font-family: 'Open Sans', sans-serif;
+      color: var(--color-text-body-heading-2);
+      text-decoration: none;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    .desktop-nav-links a.active-nav {
+      color: var(--color-primary-green-00);
+      font-weight: 600;
+      border-bottom: 2px solid var(--color-primary-green-00);
+    }
+    .desktop-topbar .user-area {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: var(--color-text-body-heading-2);
+    }
+    .desktop-content { display: flex; }
+    .desktop-sidebar {
+      width: 240px;
+      border-right: 1px solid var(--color-stroke-grey-light);
+      padding: 32px 0;
+      background: var(--color-bg-main);
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 24px;
+      font-size: 14px;
+      color: var(--color-text-body-heading-2);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .sidebar-item:hover { background: var(--color-bg-grey-light); }
+    .sidebar-item.active-nav { color: var(--color-primary-green-00); font-weight: 600; background: var(--color-bg-brand-light); border-right: 3px solid var(--color-primary-green-00); }
+    .sidebar-item i { font-size: 16px; width: 20px; text-align: center; }
+    .desktop-main {
+      flex: 1;
+      padding: 40px 48px;
+      background: var(--color-bg-grey-light);
+      min-height: 636px;
+    }
+
+    /* ===== COMPONENTES COMUNES ===== */
+    .sk-card {
+      background: var(--color-bg-main);
+      border-radius: var(--radius-card);
+      padding: var(--space-3);
+      border: 1px solid var(--color-stroke-grey-light);
+    }
+    .sk-card.brand-light { background: var(--color-bg-brand-light); border-color: var(--color-primary-green-l02); }
+    .sk-card.metric { background: var(--color-bg-main); }
+
+    /* Buttons */
+    .btn {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px;
+      border: none; cursor: pointer;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: var(--radius-btn);
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .btn-primary {
+      background: var(--color-button-primary-default);
+      color: #fff;
+      padding: 14px 24px;
+      width: 100%;
+    }
+    .btn-primary:hover { background: var(--color-button-primary-hover); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--color-button-primary-default);
+      border: 2px solid var(--color-button-primary-default);
+      padding: 12px 24px;
+      width: 100%;
+    }
+    .btn-secondary:hover { background: var(--color-bg-brand-light); }
+    .btn-tertiary {
+      background: transparent;
+      color: var(--color-button-primary-default);
+      border: none;
+      padding: 10px 24px;
+      text-decoration: underline;
+      font-weight: 600;
+      width: 100%;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-text-body-heading-2);
+      border: none;
+      padding: 10px 0;
+      font-weight: 500;
+      width: auto;
+    }
+    .btn-sm { padding: 8px 16px; font-size: 13px; width: auto; }
+
+    /* Progress bar */
+    .progress-wrap { background: #eee; border-radius: 100px; height: 8px; overflow: hidden; }
+    .progress-bar { height: 100%; background: var(--color-primary-green-00); border-radius: 100px; transition: width 0.3s; }
+    .progress-bar.large { height: 12px; }
+
+    /* Badges / chips */
+    .chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px;
+      border-radius: var(--radius-chip);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .chip-green { background: var(--color-primary-green-l01); color: var(--color-feedback-success-dark); }
+    .chip-grey { background: var(--color-bg-grey-light); color: var(--color-text-body-heading-2); }
+    .chip-orange { background: #fff3e0; color: #e67e22; }
+    .chip-blue { background: #e8f4fd; color: #1a5276; }
+
+    /* Input fields */
+    .field-wrap { display: flex; flex-direction: column; gap: 6px; }
+    .field-label { font-size: 13px; font-weight: 600; color: var(--color-text-body-heading-2); font-family: 'Open Sans', sans-serif; }
+    .field-input {
+      height: 48px;
+      border: 1.5px solid var(--color-stroke-grey-light);
+      border-radius: 8px;
+      padding: 0 16px;
+      font-size: 15px;
+      font-family: 'Open Sans', sans-serif;
+      color: var(--color-text-body-heading-1);
+      background: var(--color-bg-main);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field-input:focus { border-color: var(--color-stroke-brand); }
+    .field-input.pin-field { letter-spacing: 8px; font-size: 20px; font-weight: 700; text-align: center; }
+
+    /* Divider */
+    .divider { height: 1px; background: var(--color-stroke-grey-light); margin: var(--space-3) 0; }
+
+    /* PENDING BANNER — bloqueante legal */
+    .pending-banner {
+      background: var(--color-feedback-pending-bg);
+      border: 1.5px solid #e67e22;
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: #7d4e00;
+    }
+    .pending-banner i { color: #e67e22; font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+    .pending-banner strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; color: #e67e22; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 90px; left: 50%; transform: translateX(-50%);
+      background: #1a1a1a;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      z-index: 8888;
+      opacity: 0;
+      transition: opacity 0.3s;
+      max-width: 320px;
+      white-space: normal;
+      text-align: center;
+    }
+    .toast.visible { opacity: 1; }
+
+    /* Section titles */
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-body-heading-2);
+      margin-bottom: var(--space-2);
+    }
+
+    /* ===== SCREEN-SPECIFIC STYLES ===== */
+
+    /* P00 — Home app Skandia (adolescente) */
+    .home-hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #0a2a1a 100%);
+      padding: 24px 20px 32px;
+      color: #fff;
+    }
+    .home-hero .greeting { font-size: 13px; opacity: 0.7; margin-bottom: 4px; }
+    .home-hero .username { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+    .home-hero .balance-label { font-size: 11px; opacity: 0.6; margin-bottom: 4px; }
+    .home-hero .balance-amount { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 700; }
+
+    .home-quick-actions {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      padding: 20px;
+    }
+    .quick-action {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      cursor: pointer;
+    }
+    .quick-action .icon-wrap {
+      width: 48px; height: 48px;
+      background: var(--color-bg-grey-light);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      color: var(--color-icon-dark);
+    }
+    .quick-action .icon-wrap.brand { background: var(--color-primary-green-l01); color: var(--color-primary-green-00); }
+    .quick-action span { font-size: 10px; text-align: center; color: var(--color-text-body-heading-2); line-height: 1.2; }
+
+    .kids-entry-card {
+      margin: 0 16px 20px;
+      background: linear-gradient(135deg, #00C73D 0%, #03a835 100%);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      color: #fff;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .kids-entry-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,199,61,0.3); }
+    .kids-entry-card::after {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 100px; height: 100px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .kids-entry-card .kids-label { font-size: 11px; opacity: 0.8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .kids-entry-card .kids-title { font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .kids-entry-card .kids-sub { font-size: 12px; opacity: 0.85; margin-bottom: 16px; line-height: 1.4; }
+    .kids-entry-card .kids-cta-row { display: flex; align-items: center; justify-content: space-between; }
+    .kids-entry-card .kids-cta-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1.5px solid rgba(255,255,255,0.5);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    /* P02 — Bienvenida adolescente */
+    .welcome-screen { padding: var(--space-4) var(--space-3); flex: 1; display: flex; flex-direction: column; }
+    .welcome-visual {
+      background: linear-gradient(135deg, var(--color-primary-green-l01) 0%, #fff 100%);
+      border-radius: var(--radius-card);
+      padding: 32px 24px;
+      text-align: center;
+      margin-bottom: var(--space-4);
+    }
+    .welcome-visual .icon-big {
+      width: 72px; height: 72px;
+      background: var(--color-primary-green-00);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 32px;
+      color: #fff;
+    }
+    .welcome-title { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 700; color: var(--color-text-heading); line-height: 1.3; margin-bottom: 12px; }
+    .welcome-sub { font-size: 15px; color: var(--color-text-body-heading-2); line-height: 1.6; margin-bottom: var(--space-3); }
+    .supervision-note {
+      background: var(--color-bg-grey-light);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--color-text-body-heading-2);
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: var(--space-4);
+    }
+    .supervision-note i { color: var(--color-primary-green-00); }
+
+    /* P03 — Armar equipo */
+    .team-member-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px;
+      background: var(--color-bg-main);
+      border: 1.5px solid var(--color-stroke-grey-light);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    .avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+    }
+    .avatar.green { background: var(--color-primary-green-00); }
+    .avatar.dark { background: #1a1a2e; }
+    .avatar.grey { background: var(--color-icon-medium); }
+    .team-member-card .name { font-weight: 600; font-size: 14px; color: var(--color-text-heading); }
+    .team-member-card .role { font-size: 12px; color: var(--color-text-body-heading-2); margin-top: 2px; }
+
+    /* P04 — Dashboard adolescente */
+    .balance-hero {
+      background: linear-gradient(135deg, #0a2a1a 0%, #1a3a2a 100%);
+      padding: 24px 20px;
+      color: #fff;
+    }
+    .balance-hero .label { font-size: 12px; opacity: 0.65; margin-bottom: 4px; }
+    .balance-hero .amount { font-family: 'Montserrat', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -1px; }
+    .balance-hero .amount-sub { font-size: 12px; opacity: 0.6; margin-top: 4px; }
+
+    .meta-card {
+      background: var(--color-bg-main);
+      border-radius: var(--radius-card);
+      padding: 16px;
+      border: 1px solid var(--color-stroke-grey-light);
+      margin-bottom: 10px;
+    }
+    .meta-card .meta-name { font-weight: 600; font-size: 15px; color: var(--color-text-heading); margin-bottom: 4px; }
+    .meta-card .meta-amounts { display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-body-heading-2); margin-bottom: 8px; }
+    .meta-card .meta-pct { font-size: 12px; font-weight: 700; color: var(--color-primary-green-00); }
+
+    .reto-card {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2a1a3e 100%);
+      border-radius: var(--radius-card);
+      padding: 16px;
+      color: #fff;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .reto-card .reto-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #a78bfa; margin-bottom: 4px; }
+    .reto-card .reto-title { font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .reto-card .reto-cta { font-size: 12px; color: #a78bfa; font-weight: 600; text-decoration: underline; cursor: pointer; }
+
+    /* P05 — Crear meta */
+    .create-meta-screen { padding: var(--space-3) var(--space-3); flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+
+    /* P06A — Solicitar aporte */
+    .tx-screen { padding: var(--space-3); flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    .tx-header { text-align: center; padding: var(--space-2) 0; }
+    .tx-header .tx-icon { width: 56px; height: 56px; background: var(--color-bg-brand-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 24px; color: var(--color-primary-green-00); }
+
+    /* P09 — Meta cumplida */
+    .logro-screen { padding: var(--space-4) var(--space-3); flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-3); }
+    .logro-visual { width: 96px; height: 96px; background: linear-gradient(135deg, var(--color-primary-green-00), #03a835); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 44px; color: #fff; box-shadow: 0 8px 32px rgba(0,199,61,0.35); }
+
+    /* P10 — Hacer crecer */
+    .crecer-screen { padding: var(--space-3); flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    .comparison-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .comparison-card { padding: 14px 12px; border-radius: 10px; text-align: center; }
+    .comparison-card .cc-icon { font-size: 24px; margin-bottom: 8px; }
+    .comparison-card .cc-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .comparison-card .cc-desc { font-size: 11px; color: var(--color-text-body-heading-2); line-height: 1.4; }
+    .comparison-card.quiet { background: #f0f0f0; }
+    .comparison-card.grow { background: var(--color-bg-brand-light); }
+
+    /* P11 — Reto desbloqueado (bottom sheet) */
+    .bottom-sheet-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: flex-end;
+      z-index: 100;
+    }
+    .bottom-sheet {
+      background: var(--color-bg-main);
+      border-radius: 20px 20px 0 0;
+      padding: 8px var(--space-3) var(--space-4);
+      width: 100%;
+    }
+    .sheet-handle { width: 40px; height: 4px; background: #ddd; border-radius: 100px; margin: 8px auto 20px; }
+    .reward-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #f3e8ff;
+      color: #7c3aed;
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    /* ===== DESKTOP SCREENS ===== */
+    .desktop-screen { display: none; }
+    .desktop-screen.active { display: flex; }
+
+    /* P00-padre */
+    .portal-welcome-banner {
+      background: linear-gradient(135deg, #1a1a2e 0%, #0a2a1a 100%);
+      color: #fff;
+      padding: 32px 40px;
+      border-radius: var(--radius-card);
+      margin-bottom: var(--space-4);
+    }
+    .portal-welcome-banner h2 { font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .portal-welcome-banner p { font-size: 14px; opacity: 0.75; }
+    .portal-products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: var(--space-4); }
+    .portal-product-card {
+      background: var(--color-bg-main);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      border: 1px solid var(--color-stroke-grey-light);
+      cursor: pointer;
+    }
+    .portal-product-card .prod-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-body-heading-2); margin-bottom: 4px; }
+    .portal-product-card .prod-amount { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 8px; }
+    .portal-product-card .prod-sub { font-size: 12px; color: var(--color-text-body-heading-2); }
+
+    .kids-desktop-entry {
+      background: linear-gradient(135deg, #00C73D 0%, #03a835 100%);
+      border-radius: var(--radius-card);
+      padding: 24px 32px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      margin-bottom: var(--space-4);
+      transition: transform 0.15s;
+    }
+    .kids-desktop-entry:hover { transform: translateY(-2px); }
+    .kids-desktop-entry .left-content h3 { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .kids-desktop-entry .left-content p { font-size: 14px; opacity: 0.85; }
+    .kids-desktop-entry .entry-btn { background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5); color: #fff; padding: 10px 24px; border-radius: 100px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Open Sans', sans-serif; }
+
+    /* Desktop card rows */
+    .desktop-card-row { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+    .desktop-full-card { background: var(--color-bg-main); border-radius: var(--radius-card); padding: var(--space-4); border: 1px solid var(--color-stroke-grey-light); }
+    .desktop-page-title { font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 700; color: var(--color-text-heading); margin-bottom: var(--space-1); }
+    .desktop-page-sub { font-size: 14px; color: var(--color-text-body-heading-2); margin-bottom: var(--space-4); }
+
+    /* Alert */
+    .alert-card {
+      background: #fff8e1;
+      border: 1.5px solid #f59e0b;
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: var(--space-3);
+    }
+    .alert-card i { color: #f59e0b; font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .alert-card .alert-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+    .alert-card .alert-sub { font-size: 13px; color: var(--color-text-body-heading-2); }
+
+    /* P01 — Activación parental — Landing page */
+    /* Full-bleed wrapper: compensates desktop-main padding */
+    .p01-landing {
+      margin: -40px -48px;
+      width: calc(100% + 96px);
+      font-family: 'Open Sans', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Section containers */
+    .p01-section {
+      padding: 80px 0;
+    }
+    .p01-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 80px;
+    }
+
+    /* ---- Hero ---- */
+    .p01-hero {
+      background: #ffffff;
+    }
+    .p01-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--color-primary-green-l01);
+      color: var(--color-feedback-success-dark);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+    .p01-hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--color-text-heading);
+      line-height: 1.2;
+      margin-bottom: 20px;
+      max-width: 720px;
+    }
+    .p01-hero-subtitle {
+      font-size: 18px;
+      color: var(--color-text-body-heading-2);
+      line-height: 1.6;
+      max-width: 660px;
+      margin-bottom: 36px;
+    }
+    .p01-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--color-button-primary-default);
+      color: #ffffff;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 16px 36px;
+      border-radius: var(--radius-btn);
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      text-decoration: none;
+    }
+    .p01-btn-primary:hover {
+      background: var(--color-button-primary-hover);
+      transform: translateY(-1px);
+    }
+    .p01-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--color-button-primary-default);
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 14px 36px;
+      border-radius: var(--radius-btn);
+      border: 2px solid var(--color-button-primary-default);
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+    .p01-btn-secondary:hover {
+      background: var(--color-bg-brand-light);
+    }
+    .p01-hero-microcopy {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #999999;
+    }
+    .p01-hero-microcopy span { margin: 0 6px; }
+
+    /* ---- Features grid ---- */
+    .p01-features {
+      background: #f7f7f7;
+    }
+    .p01-section-heading {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-text-heading);
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .p01-features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .p01-feature-card {
+      background: #ffffff;
+      border-radius: var(--radius-card);
+      padding: 28px 24px;
+      border: 1px solid var(--color-stroke-grey-light);
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+    }
+    .p01-feature-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 199, 61, 0.12);
+      border-color: var(--color-stroke-brand);
+      transform: translateY(-2px);
+    }
+    .p01-feature-card .feat-icon {
+      font-size: 40px;
+      color: var(--color-primary-green-00);
+      margin-bottom: 16px;
+    }
+    .p01-feature-card .feat-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-text-heading);
+      margin-bottom: 8px;
+    }
+    .p01-feature-card .feat-desc {
+      font-size: 14px;
+      color: var(--color-text-body-heading-2);
+      line-height: 1.55;
+    }
+
+    /* ---- CTA Section ---- */
+    .p01-cta-section {
+      background: #ffffff;
+      text-align: center;
+    }
+    .p01-cta-section h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-text-heading);
+      margin-bottom: 12px;
+    }
+    .p01-cta-subtitle {
+      font-size: 16px;
+      color: var(--color-text-body-heading-2);
+      margin-bottom: 32px;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .p01-cta-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ---- Courses Section ---- */
+    .p01-courses {
+      background: #003d1a;
+    }
+    .p01-courses .p01-section-heading {
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .p01-courses-subtitle {
+      font-size: 15px;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .p01-courses-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .p01-course-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius-card);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .p01-course-card:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+    .p01-course-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 140px; height: 140px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .p01-course-card .course-icon {
+      font-size: 40px;
+      color: #ffffff;
+    }
+    .p01-course-card .course-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #00c73d;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+    .p01-course-card .course-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+    .p01-course-card .course-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.55;
+    }
+    .p01-course-card .course-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+    .p01-course-card .course-cta:hover { text-decoration: underline; }
+
+    /* ===== SKANDIA CHANNEL — CURSOS PARA PADRES ===== */
+    .channel-section {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--color-stroke-grey-light);
+    }
+    .channel-section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-text-heading);
+      margin-bottom: 4px;
+    }
+    .channel-section-sub {
+      font-size: 13px;
+      color: var(--color-text-body-heading-2);
+      margin-bottom: 20px;
+    }
+    .channel-courses-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .channel-course-card {
+      background: linear-gradient(135deg, #003d1a 0%, #00c73d 100%);
+      border-radius: var(--radius-card);
+      padding: 28px 24px 24px;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .channel-course-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0, 61, 26, 0.35);
+    }
+    .channel-course-card::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 50%;
+    }
+    .course-card-icon {
+      font-size: 40px;
+      color: #ffffff;
+      line-height: 1;
+    }
+    .course-card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      width: fit-content;
+    }
+    .course-card-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+    .course-card-desc {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .course-card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+    .course-card-cta:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== ZONA DE APRENDIZAJE (P04) ===== */
+    .zona-aprendizaje { padding: 0 16px 8px; }
+    .zona-aprendizaje .zona-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text-heading);
+      margin-bottom: 12px;
+    }
+    .lecciones-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .lecciones-scroll::-webkit-scrollbar { display: none; }
+    .leccion-card {
+      width: 150px;
+      min-width: 150px;
+      height: 180px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .leccion-card.activa {
+      background: linear-gradient(135deg, #003d1a, #00c73d);
+      cursor: pointer;
+    }
+    .leccion-card.bloqueada {
+      background: #e8e8e8;
+      cursor: default;
+    }
+    .leccion-card.bloqueada .leccion-contenido { opacity: 0.5; }
+    .leccion-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.9);
+      color: #003d1a;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 100px;
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+    .leccion-icon {
+      font-size: 28px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .leccion-icon.gris { color: #999; }
+    .leccion-titulo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      flex: 1;
+    }
+    .leccion-titulo.gris { color: #666; }
+    .leccion-unlock-text {
+      font-size: 10px;
+      color: #999;
+      line-height: 1.3;
+      margin-top: 4px;
+    }
+    .leccion-progress-wrap {
+      background: rgba(255,255,255,0.25);
+      border-radius: 100px;
+      height: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .leccion-progress-bar {
+      height: 100%;
+      background: #fff;
+      border-radius: 100px;
+      transition: width 0.5s ease;
+    }
+
+    /* ===== PANTALLA LECCIÓN 1 ===== */
+    .leccion-screen { flex: 1; display: flex; flex-direction: column; }
+    .leccion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--color-stroke-grey-light);
+    }
+    .leccion-header .lec-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-text-heading);
+    }
+    .leccion-header .lec-badge {
+      background: var(--color-primary-green-l01);
+      color: var(--color-feedback-success-dark);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    .pasos-wrap {
+      padding: 16px 20px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .pasos-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .paso-dot {
+      width: 28px; height: 6px;
+      border-radius: 100px;
+      background: #e0e0e0;
+      transition: background 0.3s;
+    }
+    .paso-dot.activo { background: var(--color-primary-green-00); }
+    .paso-label {
+      font-size: 12px;
+      color: var(--color-text-body-heading-2);
+      margin-left: 4px;
+    }
+    .concepto-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      margin: 0 16px 16px;
+    }
+    .concepto-card h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-text-heading);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .concepto-card p {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 16px;
+      color: var(--color-text-body-heading-2);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .ilustracion-placeholder {
+      width: 100%;
+      height: 140px;
+      background: #e8f8ed;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: var(--color-primary-green-00);
+    }
+    .pregunta-wrap {
+      padding: 0 16px 16px;
+    }
+    .pregunta-texto {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-text-heading);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .opcion-card {
+      border: 2px solid var(--color-stroke-grey-light);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: var(--color-text-body-heading-1);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .opcion-card:hover { border-color: #aaa; }
+    .opcion-card.correcta {
+      border-color: var(--color-primary-green-00);
+      background: var(--color-bg-brand-light);
+      color: var(--color-feedback-success-dark);
+    }
+    .opcion-card .opcion-check {
+      width: 20px; height: 20px;
+      border: 2px solid var(--color-stroke-grey-light);
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      color: transparent;
+      transition: all 0.2s;
+    }
+    .opcion-card.correcta .opcion-check {
+      border-color: var(--color-primary-green-00);
+      background: var(--color-primary-green-00);
+      color: #fff;
+    }
+    .feedback-exito {
+      background: var(--color-bg-brand-light);
+      border: 1.5px solid var(--color-primary-green-00);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--color-feedback-success-dark);
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    .feedback-exito i { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .feedback-intento {
+      background: var(--color-bg-grey-light);
+      border: 1.5px solid #ccc;
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--color-text-body-heading-2);
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    .feedback-intento i { font-size: 18px; flex-shrink: 0; margin-top: 1px; color: #999; }
+
+    /* PIN modal */
+    .pin-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9000;
+    }
+    .pin-modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .pin-modal h3 { font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--color-text-heading); }
+    .pin-modal p { font-size: 14px; color: var(--color-text-body-heading-2); margin-bottom: var(--space-3); line-height: 1.5; }
+
+    /* Utility */
+    .mt-1 { margin-top: var(--space-1); }
+    .mt-2 { margin-top: var(--space-2); }
+    .mt-3 { margin-top: var(--space-3); }
+    .mt-4 { margin-top: var(--space-4); }
+    .mb-1 { margin-bottom: var(--space-1); }
+    .mb-2 { margin-bottom: var(--space-2); }
+    .mb-3 { margin-bottom: var(--space-3); }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .flex-center { display: flex; align-items: center; justify-content: center; }
+    .text-green { color: var(--color-primary-green-00); }
+    .text-muted { color: var(--color-text-body-heading-2); font-size: 13px; }
+    .text-sm { font-size: 13px; }
+    .text-xs { font-size: 11px; }
+    .font-bold { font-weight: 700; }
+    .font-heading { font-family: 'Montserrat', sans-serif; }
+    .w-full { width: 100%; }
+    .p-3 { padding: var(--space-3); }
+    .gap-2 { gap: var(--space-2); }
+    .gap-3 { gap: var(--space-3); }
+    .flex-col { display: flex; flex-direction: column; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .spacer { flex: 1; }
+    .screen-scroll { overflow-y: auto; flex: 1; }
+    .screen-footer { padding: var(--space-3); border-top: 1px solid var(--color-stroke-grey-light); background: var(--color-bg-main); }
+    .back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--color-text-body-heading-2); font-size: 14px; cursor: pointer; padding: 0; font-family: 'Open Sans', sans-serif; }
+    .screen-header { padding: 12px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--color-stroke-grey-light); }
+    .screen-header .screen-title { font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 700; color: var(--color-text-heading); }
+  </style>
+</head>
+<body>
+
+<!-- ===== SELECTOR DE FLUJO ===== -->
+<div id="flow-selector">
+  <span class="selector-label">Flujo</span>
+  <button class="flow-tab active" onclick="switchFlow('adol')">Vista Adolescente (375px)</button>
+  <button class="flow-tab" onclick="switchFlow('padre')">Vista Padre (Desktop)</button>
+  <div class="screen-nav">
+    <button onclick="prevScreen()"><i class="fa-solid fa-chevron-left"></i></button>
+    <span id="screen-indicator">1 / 10</span>
+    <button onclick="nextScreen()"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"></div>
+
+<!-- ========================================
+     FLUJO ADOLESCENTE
+     ======================================== -->
+<div class="prototype-stage" id="adol-stage">
+  <div class="mobile-shell">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="icons">
+        <i class="fa-solid fa-signal" style="font-size:12px"></i>
+        <i class="fa-solid fa-wifi" style="font-size:12px"></i>
+        <i class="fa-solid fa-battery-full" style="font-size:12px"></i>
+      </div>
+    </div>
+
+    <!-- App navbar Skandia -->
+    <div class="app-navbar">
+      <div class="skandia-logo">Skandia<span>.</span></div>
+      <div class="nav-icons">
+        <i class="fa-regular fa-bell"></i>
+        <i class="fa-regular fa-circle-user"></i>
+      </div>
+    </div>
+
+    <!-- ====== P00-ADOL: Home app Skandia ====== -->
+    <div class="screen active" id="screen-adol-p00" data-flow="adol" data-label="P00 · Home app Skandia">
+      <div class="screen-scroll">
+        <div class="home-hero">
+          <div class="greeting">Buen día,</div>
+          <div class="username">Valentina</div>
+          <div class="balance-label">Saldo total consolidado</div>
+          <div class="balance-amount">$412.500</div>
+        </div>
+
+        <div class="home-quick-actions">
+          <div class="quick-action">
+            <div class="icon-wrap"><i class="fa-solid fa-arrow-up"></i></div>
+            <span>Transferir</span>
+          </div>
+          <div class="quick-action">
+            <div class="icon-wrap"><i class="fa-solid fa-arrow-down"></i></div>
+            <span>Recargar</span>
+          </div>
+          <div class="quick-action">
+            <div class="icon-wrap"><i class="fa-solid fa-receipt"></i></div>
+            <span>Pagos</span>
+          </div>
+          <div class="quick-action">
+            <div class="icon-wrap brand"><i class="fa-solid fa-chart-line"></i></div>
+            <span>Mis productos</span>
+          </div>
+        </div>
+
+        <div style="padding: 0 16px 8px;">
+          <div class="section-title">Tu espacio</div>
+        </div>
+
+        <!-- TARJETA DE ENTRADA A KIDS -->
+        <div class="kids-entry-card" onclick="goToScreen('screen-adol-p02')">
+          <div class="kids-label">Nuevo · Tu sección</div>
+          <div class="kids-title">Tu plata, tu camino</div>
+          <div class="kids-sub">Crea metas, ve cómo crece tu dinero y aprende practicando de verdad.</div>
+          <div class="kids-cta-row">
+            <button class="kids-cta-btn">Entrar a mi sección</button>
+            <i class="fa-solid fa-arrow-right" style="font-size:18px; opacity:0.8;"></i>
+          </div>
+        </div>
+
+        <div style="padding: 0 16px 16px;">
+          <div class="section-title" style="margin-bottom:12px">Mis productos</div>
+          <div class="sk-card mb-2" style="display:flex;align-items:center;gap:12px;padding:14px 16px;">
+            <div style="width:40px;height:40px;background:var(--color-bg-brand-light);border-radius:10px;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-piggy-bank text-green"></i></div>
+            <div style="flex:1"><div style="font-weight:600;font-size:14px">Ahorro programado</div><div class="text-muted">$180.000</div></div>
+            <i class="fa-solid fa-chevron-right" style="color:#ccc;font-size:12px"></i>
+          </div>
+          <div class="sk-card" style="display:flex;align-items:center;gap:12px;padding:14px 16px;">
+            <div style="width:40px;height:40px;background:#e8f4fd;border-radius:10px;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-building-columns" style="color:#1a5276"></i></div>
+            <div style="flex:1"><div style="font-weight:600;font-size:14px">Cuenta de ahorros</div><div class="text-muted">$232.500</div></div>
+            <i class="fa-solid fa-chevron-right" style="color:#ccc;font-size:12px"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="bottom-nav-item active"><i class="fa-solid fa-house"></i><span>Inicio</span></div>
+        <div class="bottom-nav-item"><i class="fa-regular fa-credit-card"></i><span>Productos</span></div>
+        <div class="bottom-nav-item"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Movimientos</span></div>
+        <div class="bottom-nav-item"><i class="fa-regular fa-circle-user"></i><span>Perfil</span></div>
+      </div>
+    </div>
+
+    <!-- ====== P02: Bienvenida adolescente ====== -->
+    <div class="screen" id="screen-adol-p02" data-flow="adol" data-label="P02 · Bienvenida">
+      <div class="screen-header">
+        <button class="back-btn" onclick="goToScreen('screen-adol-p00')"><i class="fa-solid fa-chevron-left"></i></button>
+        <span class="screen-title">Tu espacio</span>
+      </div>
+      <div class="screen-scroll">
+        <div class="welcome-screen">
+          <div class="welcome-visual">
+            <div class="icon-big"><i class="fa-solid fa-bolt"></i></div>
+            <div class="welcome-title">Esta es tu plata. Aquí decides qué hacer con ella.</div>
+            <div class="welcome-sub">Puedes crear metas, ver cómo crece tu dinero y aprender cómo funcionan las inversiones — practicando de verdad.</div>
+          </div>
+
+          <div class="supervision-note">
+            <i class="fa-solid fa-users"></i>
+            <span>Para mover plata, tu equipo da el visto bueno. Tú pones la dirección.</span>
+          </div>
+
+          <div style="font-size:14px;color:var(--color-text-body-heading-2);text-align:center;margin-bottom:var(--space-3);">¿Para qué quieres guardar tu plata? Eso lo decides tú.</div>
+        </div>
+      </div>
+      <div class="screen-footer flex-col gap-2">
+        <button class="btn btn-primary" onclick="goToScreen('screen-adol-p03')">Crear mi primera meta</button>
+        <button class="btn btn-tertiary" onclick="goToScreen('screen-adol-p04')">Explorar primero</button>
+      </div>
+    </div>
+
+    <!-- ====== P03: Armar el equipo ====== -->
+    <div class="screen" id="screen-adol-p03" data-flow="adol" data-label="P03 · Armar el equipo">
+      <div class="screen-header">
+        <button class="back-btn" onclick="goToScreen('screen-adol-p02')"><i class="fa-solid fa-chevron-left"></i></button>
+        <span class="screen-title">Tu equipo</span>
+      </div>
+      <div class="screen-scroll p-3">
+        <div class="font-heading font-bold" style="font-size:20px;color:var(--color-text-heading);margin-bottom:8px">Tu equipo ya está listo.</div>
+        <div class="text-muted mb-3" style="line-height:1.6">Aquí están las personas que te acompañan. Cuando haya movimientos de plata, ellos dan el visto bueno.</div>
+
+        <div class="team-member-card">
+          <div class="avatar green">V</div>
+          <div>
+            <div class="name">Valentina (tú)</div>
+            <div class="role"><span class="chip chip-green">Capitán del equipo</span></div>
+          </div>
+        </div>
+
+        <div class="team-member-card">
+          <div class="avatar dark">C</div>
+          <div>
+            <div class="name">Carlos</div>
+            <div class="role"><span class="chip chip-grey">Tu equipo · Da el visto bueno</span></div>
+          </div>
+        </div>
+
+        <div class="team-member-card">
+          <div class="avatar" style="background:var(--color-primary-green-00);font-size:20px;">S</div>
+          <div>
+            <div class="name">Skandia</div>
+            <div class="role"><span class="chip chip-blue">Coach financiero</span></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field-wrap mb-3">
+          <label class="field-label">Dale un nombre a tu equipo (opcional)</label>
+          <input class="field-input" type="text" placeholder="Equipo García, Los Romero, el nombre que quieras..." value="Equipo Ramírez">
+        </div>
+
+        <div style="font-size:12px;color:var(--color-text-body-heading-2);text-align:center;padding:8px 0;">
+          Skandia es el coach financiero de tu equipo. Aparece cuando hay algo nuevo que aprender o cuando puedes hacer más con tu plata.
+        </div>
+      </div>
+      <div class="screen-footer">
+        <button class="btn btn-primary" onclick="goToScreen('screen-adol-p04')">Empezar con mi equipo</button>
+      </div>
+    </div>
+
+    <!-- ====== P04: Dashboard adolescente ====== -->
+    <div class="screen" id="screen-adol-p04" data-flow="adol" data-label="P04 · Dashboard">
+      <div class="balance-hero">
+        <div class="label">Tu plata ahora</div>
+        <div class="amount">$412.500</div>
+        <div class="amount-sub">Equipo Ramírez · Saldo disponible</div>
+      </div>
+
+      <div class="screen-scroll p-3">
+        <!-- Reto desbloqueado -->
+        <div class="reto-card" onclick="goToScreen('screen-adol-p11')">
+          <div class="reto-label"><i class="fa-solid fa-unlock" style="margin-right:4px"></i>Reto desbloqueado</div>
+          <div class="reto-title">¿Sabes en qué se va tu plata?</div>
+          <div class="reto-cta">Ver reto <i class="fa-solid fa-arrow-right" style="font-size:11px"></i></div>
+        </div>
+
+        <div class="section-title">Tus metas</div>
+
+        <div class="meta-card">
+          <div class="flex-between mb-1">
+            <div class="meta-name">Mis AirPods</div>
+            <span class="chip chip-green">En progreso</span>
+          </div>
+          <div class="meta-amounts">
+            <span>$238.000 de $350.000</span>
+            <span class="meta-pct">68%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar large" style="width:68%"></div>
+          </div>
+        </div>
+
+        <div style="border:1.5px dashed var(--color-stroke-grey-light);border-radius:var(--radius-card);padding:20px;text-align:center;color:var(--color-text-body-heading-2);font-size:14px;margin-bottom:10px;">
+          <i class="fa-regular fa-plus-square" style="font-size:24px;color:var(--color-stroke-grey-light);display:block;margin-bottom:8px"></i>
+          Todavía no tienes más metas. Crear una toma menos de un minuto.
+        </div>
+
+        <div class="section-title mt-3">Movimientos</div>
+        <div style="font-size:13px;color:var(--color-text-body-heading-2);text-align:center;padding:16px 0;">No hay movimientos recientes.</div>
+
+        <!-- ZONA DE APRENDIZAJE -->
+        <div class="zona-aprendizaje mt-3">
+          <div class="zona-title">Tu zona de aprendizaje</div>
+          <div class="lecciones-scroll">
+
+            <!-- Tarjeta 1 — desbloqueada -->
+            <div class="leccion-card activa" onclick="goToScreen('screen-adol-leccion-1')">
+              <div class="leccion-badge">Nivel 1</div>
+              <div class="leccion-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+              <div class="leccion-titulo">¿Para qué sirve ahorrar?</div>
+              <div class="leccion-progress-wrap">
+                <div class="leccion-progress-bar" id="leccion1-progress-bar" style="width:0%"></div>
+              </div>
+            </div>
+
+            <!-- Tarjeta 2 — bloqueada -->
+            <div class="leccion-card bloqueada">
+              <div class="leccion-contenido">
+                <div class="leccion-icon gris"><i class="fa-solid fa-lock"></i></div>
+                <div class="leccion-titulo gris">La magia del interés</div>
+                <div class="leccion-unlock-text">Completa el nivel 1 para desbloquear</div>
+              </div>
+            </div>
+
+            <!-- Tarjeta 3 — bloqueada -->
+            <div class="leccion-card bloqueada">
+              <div class="leccion-contenido">
+                <div class="leccion-icon gris"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="leccion-titulo gris">Gastos que no ves</div>
+                <div class="leccion-unlock-text">Completa el nivel 1 para desbloquear</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="screen-footer" style="padding:12px 16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <button class="btn btn-primary btn-sm" onclick="goToScreen('screen-adol-p05')">+ Meta</button>
+          <button class="btn btn-secondary btn-sm" onclick="goToScreen('screen-adol-p06a')">Sumar plata</button>
+          <button class="btn btn-secondary btn-sm" onclick="goToScreen('screen-adol-p08a')">Retirar</button>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="bottom-nav-item active"><i class="fa-solid fa-house"></i><span>Inicio</span></div>
+        <div class="bottom-nav-item"><i class="fa-regular fa-flag"></i><span>Metas</span></div>
+        <div class="bottom-nav-item" onclick="goToScreen('screen-adol-p10')"><i class="fa-solid fa-seedling"></i><span>Crecer</span></div>
+        <div class="bottom-nav-item"><i class="fa-solid fa-trophy"></i><span>Logros</span></div>
+      </div>
+    </div>
+
+    <!-- ====== P05: Crear meta ====== -->
+    <div class="screen" id="screen-adol-p05" data-flow="adol" data-label="P05 · Crear meta">
+      <div class="screen-header">
+        <button class="back-btn" onclick="goToScreen('screen-adol-p04')"><i class="fa-solid fa-chevron-left"></i></button>
+        <span class="screen-title">Nueva meta</span>
+      </div>
+      <div class="screen-scroll">
+        <div class="create-meta-screen">
+          <div class="font-heading font-bold" style="font-size:22px;color:var(--color-text-heading);">¿Para qué quieres guardar?</div>
+
+          <div class="field-wrap">
+            <label class="field-label">Nombre de tu meta</label>
+            <input class="field-input" type="text" placeholder="Ej: mis tenis, viaje a Santa Marta, mi primer millón">
+          </div>
+
+          <div class="field-wrap">
+            <label class="field-label">¿Cuánto necesitas?</label>
+            <input class="field-input" type="text" placeholder="$0">
+          </div>
+
+          <div class="field-wrap">
+            <label class="field-label">¿Para cuándo?</label>
+            <input class="field-input" type="date">
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--color-text-body-heading-2);margin-top:6px;cursor:pointer;">
+              <input type="checkbox" style="accent-color:var(--color-primary-green-00)"> Sin fecha por ahora
+            </label>
+          </div>
+
+          <div style="font-size:12px;color:var(--color-text-body-heading-2);background:var(--color-bg-grey-light);padding:10px 12px;border-radius:8px;">
+            <i class="fa-solid fa-users text-green" style="margin-right:6px"></i>
+            Tu Equipo Ramírez ya la puede ver cuando la crees.
+          </div>
+        </div>
+      </div>
+      <div class="screen-footer flex-col gap-2">
+        <button class="btn btn-primary" onclick="showToast('Meta creada. Tu equipo ya la puede ver.'); setTimeout(()=>goToScreen('screen-adol-p04'),1500)">Crear esta meta</button>
+        <button class="btn btn-tertiary" onclick="goToScreen('screen-adol-p04')">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- ====== P06A: Solicitar aporte (vista adolescente) ====== -->
+    <div class="screen" id="screen-adol-p06a" data-flow="adol" data-label="P06A · Solicitar aporte">
+      <div class="screen-header">
+        <button class="back-btn" onclick="goToScreen('screen-adol-p04')"><i class="fa-solid fa-chevron-left"></i></button>
+        <span class="screen-title">Sumar a mi billetera</span>
+      </div>
+      <div class="screen-scroll">
+        <div class="tx-screen">
+          <div class="tx-header">
+            <div class="tx-icon"><i class="fa-solid fa-arrow-down-to-line"></i></div>
+            <div class="welcome-title" style="font-size:20px;">¿Cuánto quieres sumar a tu billetera?</div>
+            <div class="welcome-sub" style="font-size:14px;color:var(--color-text-body-heading-2);margin-top:8px;">Tu familia recibirá la solicitud y confirma con su PIN.</div>
+          </div>
+          <div class="field-wrap">
+            <label class="field-label">Monto a sumar</label>
+            <sk-inputnumber placeholder="$0"></sk-inputnumber>
+          </div>
+        </div>
+      </div>
+      <div class="screen-footer">
+        <button class="btn btn-primary"
+          onclick="showToast('Solicitud enviada. Cuando tu equipo lo confirme con PIN, el dinero llega a tu billetera.'); setTimeout(()=>goToScreen('screen-adol-p04'),2500)">
+          Solicitar aporte
+        </button>
+      </div>
+    </div>
+
+    <!-- ====== P08A: Solicitar retiro (vista adolescente) ====== -->
+    <div class="screen" id="screen-adol-p08a" data-flow="adol" data-label="P08A · Solicitar retiro">
+      <div class="screen-header">
+        <button class="back-btn" onclick="goToScreen('screen-adol-p04')"><i class="fa-solid fa-chevron-left"></i></button>
+        <span class="screen-title">Retirar plata</span>
+      </div>
+      <div class="screen-scroll">
+        <div class="tx-screen">
+          <div class="tx-header">
+            <div class="tx-icon" style="background:#fef9e7"><i class="fa-solid fa-arrow-up" style="color:#e67e22"></i></div>
+            <div class="font-heading font-bold" style="font-size:20px;color:var(--color-text-heading);margin-bottom:8px">¿Cuánto quieres retirar?</div>
+            <div class="text-muted" style="font-size:14px;line-height:1.5">Tu familia confirma el retiro con su PIN. El dinero llega a la cuenta destino vinculada.</div>
+          </div>
+
+          <div class="field-wrap">
+            <label class="field-label">Monto a retirar</label>
+            <input class="field-input" type="text" placeholder="$0">
+          </div>
+
+          <div style="background:var(--color-bg-grey-light);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--color-text-body-heading-2);line-height:1.5;">
+            <i class="fa-solid fa-wallet text-green" style="margin-right:6px"></i>
+            Saldo disponible: <strong>$412.500</strong>
+          </div>
+        </div>
+      </div>
+      <div class="screen-footer">
+        <button class="btn btn-primary" onclick="showToast('Solicitud lista. Cuando tu familia confirme con PIN, el dinero se procesa.'); setTimeout(()=>goToScreen('screen-adol-p04'),2500)">Solicitar retiro</button>
+      </div>
+    </div>
+
+    <!-- ====== P09: Meta cumplida ====== -->
+    <div class="screen" id="screen-adol-p09" data-flow="adol" data-label="P09 · Meta cumplida">
+      <div class="screen-scroll">
+        <div class="logro-screen">
+          <div class="logro-visual">🏆</div>
+
+          <div>
+            <div class="font-heading font-bold" style="font-size:28px;color:var(--color-text-heading);margin-bottom:8px">¡Lo lograste!</div>
+            <div style="font-size:15px;color:var(--color-text-body-heading-2);line-height:1.6">Llegaste a tu meta <strong>"Mis AirPods"</strong>.<br>¿Qué quieres hacer con esta plata?</div>
+          </div>
+
+          <div class="sk-card brand-light w-full" style="text-align:center">
+            <div style="font-size:13px;color:var(--color-text-body-heading-2);margin-bottom:4px">Meta cumplida</div>
+            <div class="font-heading font-bold" style="font-size:24px;color:var(--color-primary-green-00)">$350.000</div>
+            <div class="chip chip-green mt-1">Objetivo alcanzado ✓</div>
+          </div>
+
+          <div style="width:100%;display:flex;flex-direction:column;gap:10px;">
+            <button class="btn btn-primary" onclick="goToScreen('screen-adol-p08a')">Retirar</button>
+            <button class="btn btn-secondary" onclick="goToScreen('screen-adol-p05')">Crear una nueva meta</button>
+            <button class="btn btn-tertiary" onclick="goToScreen('screen-adol-p10')">Hacer crecer esta plata</button>
+          </div>
+
+          <div style="font-size:12px;color:var(--color-text-body-heading-2);text-align:center;line-height:1.5;">
+            Para retirar, tu equipo recibirá una notificación para aprobarlo.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== P10: Hacer crecer ====== -->
+    <div class="screen" id="screen-adol-p10" data-flow="adol" data-label="P10 · Hacer crecer">
+      <div class="screen-header">
+        <button class="back-btn" onclick="goToScreen('screen-adol-p04')"><i class="fa-solid fa-chevron-left"></i></button>
+        <span class="screen-title">Hacer crecer</span>
+      </div>
+      <div class="screen-scroll">
+        <div class="crecer-screen">
+          <div>
+            <div class="font-heading font-bold" style="font-size:22px;color:var(--color-text-heading);margin-bottom:8px">Tu plata puede hacer más que esperar.</div>
+            <div style="font-size:14px;color:var(--color-text-body-heading-2);line-height:1.6;">Cuando guardas en una meta normal, tu plata espera quieta. Cuando eliges hacerla crecer, trabaja mientras tú haces otras cosas.</div>
+          </div>
+
+          <div class="comparison-cards">
+            <div class="comparison-card quiet">
+              <div class="cc-icon">😴</div>
+              <div class="cc-title">Guardar quieto</div>
+              <div class="cc-desc">Tu plata espera hasta que la necesites. Seguro, pero no crece.</div>
+            </div>
+            <div class="comparison-card grow">
+              <div class="cc-icon">🌱</div>
+              <div class="cc-title">Hacer crecer</div>
+              <div class="cc-desc">Tu plata trabaja mientras tú haces otras cosas.</div>
+            </div>
+          </div>
+
+          <div class="sk-card" style="background:#fafafa">
+            <div style="font-size:13px;font-weight:700;color:var(--color-text-heading);margin-bottom:6px;display:flex;align-items:center;gap:6px;"><i class="fa-solid fa-circle-info text-green"></i> Importante</div>
+            <div style="font-size:13px;color:var(--color-text-body-heading-2);line-height:1.6;">No es magia ni es seguro al 100%. A veces sube, a veces baja un poco. Pero con tiempo, tiende a crecer.</div>
+          </div>
+
+          <div style="background:var(--color-bg-grey-light);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--color-text-body-heading-2);">
+            <i class="fa-solid fa-users text-green" style="margin-right:6px"></i>
+            Cualquier cambio lo aprueba tu equipo.
+          </div>
+        </div>
+      </div>
+      <div class="screen-footer flex-col gap-2">
+        <button class="btn btn-primary" onclick="showToast('Explorando opciones — pendiente de definición de producto.')">Explorar esta opción</button>
+        <button class="btn btn-tertiary" onclick="goToScreen('screen-adol-p04')">Ahora no</button>
+      </div>
+    </div>
+
+    <!-- ====== P11: Reto desbloqueado (bottom sheet) ====== -->
+    <div class="screen" id="screen-adol-p11" data-flow="adol" data-label="P11 · Reto desbloqueado">
+      <div class="balance-hero">
+        <div class="label">Tu plata ahora</div>
+        <div class="amount">$412.500</div>
+      </div>
+      <div class="screen-scroll p-3">
+        <div class="meta-card">
+          <div class="flex-between mb-1">
+            <div class="meta-name">Mis AirPods</div>
+            <span class="chip chip-green">En progreso</span>
+          </div>
+          <div class="meta-amounts">
+            <span>$238.000 de $350.000</span>
+            <span class="meta-pct">68%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar large" style="width:68%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom sheet superpuesto -->
+      <div class="bottom-sheet-overlay">
+        <div class="bottom-sheet">
+          <div class="sheet-handle"></div>
+          <div class="reward-badge"><i class="fa-solid fa-unlock"></i> Reto desbloqueado</div>
+          <div class="font-heading font-bold" style="font-size:18px;color:var(--color-text-heading);margin-bottom:8px">¿Sabes en qué se va tu plata cada semana?</div>
+          <div style="font-size:14px;color:var(--color-text-body-heading-2);line-height:1.6;margin-bottom:var(--space-2);">Registra tus 3 gastos más grandes de los últimos 7 días.</div>
+
+          <div style="background:var(--color-bg-brand-light);border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:var(--space-3);display:flex;align-items:center;gap:8px;">
+            <i class="fa-solid fa-medal text-green" style="font-size:18px"></i>
+            <div>Completa este reto y desbloquea <strong>la siguiente función</strong></div>
+          </div>
+
+          <div style="font-size:12px;color:var(--color-text-body-heading-2);margin-bottom:var(--space-3);display:flex;align-items:center;gap:6px;">
+            <i class="fa-solid fa-shield-check text-green"></i>
+            Este reto es solo tuyo. No se comparte con tu equipo.
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <button class="btn btn-primary" onclick="showToast('Reto iniciado. ¡Adelante!'); setTimeout(()=>goToScreen('screen-adol-p04'),1500)">Empezar reto</button>
+            <button class="btn btn-tertiary" onclick="goToScreen('screen-adol-p04')">Más tarde</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== Lección 1: ¿Para qué sirve ahorrar? ====== -->
+    <div class="screen" id="screen-adol-leccion-1" data-flow="adol" data-label="Lección 1 · ¿Para qué sirve ahorrar?">
+      <div class="leccion-header">
+        <button class="back-btn" onclick="goToScreen('screen-adol-p04')"><i class="fa-solid fa-chevron-left"></i></button>
+        <span class="lec-title">Nivel 1</span>
+        <span class="lec-badge">En progreso</span>
+      </div>
+
+      <div class="screen-scroll">
+        <!-- Barra de progreso de pasos -->
+        <div class="pasos-wrap">
+          <div class="pasos-row">
+            <div class="paso-dot activo" id="paso-dot-1"></div>
+            <div class="paso-dot" id="paso-dot-2"></div>
+            <div class="paso-dot" id="paso-dot-3"></div>
+            <div class="paso-dot" id="paso-dot-4"></div>
+            <span class="paso-label">Paso 1 de 4</span>
+          </div>
+        </div>
+
+        <!-- Tarjeta de concepto -->
+        <div class="concepto-card">
+          <h2>¿Para qué sirve ahorrar?</h2>
+          <p>Ahorrar no es solo guardar plata para no gastarla. Es separar una parte de lo que tienes ahora para lograr algo que quieres más adelante. Cada peso que guardas hoy es un paso hacia tu próxima meta.</p>
+          <div class="ilustracion-placeholder">
+            <i class="fa-solid fa-piggy-bank"></i>
+          </div>
+        </div>
+
+        <!-- Pregunta de verificación -->
+        <div class="pregunta-wrap">
+          <div class="pregunta-texto">¿Cuál de estas es la mejor razón para ahorrar?</div>
+
+          <div class="opcion-card" id="opcion-0" onclick="checkAnswer(0)">
+            <div class="opcion-check" id="check-0"><i class="fa-solid fa-check"></i></div>
+            <span>Para no gastar todo de una vez</span>
+          </div>
+
+          <div class="opcion-card" id="opcion-1" onclick="checkAnswer(1)">
+            <div class="opcion-check" id="check-1"><i class="fa-solid fa-check"></i></div>
+            <span>Para lograr algo que quiero</span>
+          </div>
+
+          <div class="opcion-card" id="opcion-2" onclick="checkAnswer(2)">
+            <div class="opcion-check" id="check-2"><i class="fa-solid fa-check"></i></div>
+            <span>Porque mis papás me lo dijeron</span>
+          </div>
+
+          <!-- Feedback éxito -->
+          <div class="feedback-exito" id="feedback-exito" style="display:none">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>¡Exacto! Ahorrar con propósito es más poderoso que ahorrar sin meta.</span>
+          </div>
+
+          <!-- Feedback intento de nuevo -->
+          <div class="feedback-intento" id="feedback-intento" style="display:none">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Casi — piénsalo de nuevo. ¿Cuál tiene más que ver con tus metas?</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA oculto hasta respuesta correcta -->
+      <div class="screen-footer" id="cta-siguiente" style="display:none">
+        <button class="btn btn-primary" onclick="completarPaso1()">Siguiente →</button>
+      </div>
+    </div>
+
+  </div><!-- /mobile-shell -->
+</div><!-- /adol-stage -->
+
+
+<!-- ========================================
+     FLUJO PADRE (DESKTOP)
+     ======================================== -->
+<div class="prototype-stage" id="padre-stage" style="display:none">
+  <div class="desktop-shell">
+    <!-- Top bar portal Skandia -->
+    <div class="desktop-topbar">
+      <div class="logo-area">
+        <div class="skandia-logo" style="font-size:22px">Skandia<span>.</span></div>
+        <div style="width:1px;height:24px;background:var(--color-stroke-grey-light);margin:0 8px"></div>
+        <div style="font-size:13px;color:var(--color-text-body-heading-2)">Portal Clientes</div>
+      </div>
+      <div class="desktop-nav-links">
+        <a>Mi portafolio</a>
+        <a>Movimientos</a>
+        <a>Inversiones</a>
+        <a class="active-nav">Familia</a>
+        <a>Servicios</a>
+      </div>
+      <div class="user-area">
+        <i class="fa-regular fa-circle-user" style="font-size:20px"></i>
+        <span>Carlos Ramírez</span>
+        <i class="fa-solid fa-chevron-down" style="font-size:11px"></i>
+      </div>
+    </div>
+
+    <!-- Content area -->
+    <div class="desktop-content">
+      <!-- Sidebar -->
+      <div class="desktop-sidebar">
+        <div style="padding:0 24px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-body-heading-2);">Mi espacio</div>
+        <div class="sidebar-item" onclick="goToDesktopScreen('screen-padre-p00')"><i class="fa-solid fa-house"></i> Inicio</div>
+        <div class="sidebar-item" onclick="goToDesktopScreen('screen-padre-p00')"><i class="fa-solid fa-chart-pie"></i> Mi portafolio</div>
+        <div class="sidebar-item" onclick="goToDesktopScreen('screen-padre-p00')"><i class="fa-regular fa-credit-card"></i> Productos</div>
+        <div style="padding:16px 24px 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-body-heading-2);">Familia</div>
+        <div class="sidebar-item active-nav" id="sidebar-kids" onclick="goToDesktopScreen('screen-padre-p01')"><i class="fa-solid fa-users"></i> Skandia Kids</div>
+        <div class="sidebar-item" onclick="goToDesktopScreen('screen-padre-p12')"><i class="fa-solid fa-child"></i> Valentina</div>
+      </div>
+
+      <!-- Main content -->
+      <div class="desktop-main">
+
+        <!-- ====== P00-PADRE: Portal con punto de entrada Kids ====== -->
+        <div class="desktop-screen active" id="screen-padre-p00" data-flow="padre" data-label="P00 · Portal Skandia (entrada Kids)">
+          <div style="flex:1">
+            <div class="portal-welcome-banner">
+              <h2>Buen día, Carlos</h2>
+              <p>Tu portafolio está activo. Revisa tus productos y el avance de tu familia.</p>
+            </div>
+
+            <div class="portal-products-grid">
+              <div class="portal-product-card">
+                <div class="prod-label">Pensión voluntaria</div>
+                <div class="prod-amount">$48.200.000</div>
+                <div class="prod-sub">Rendimiento YTD: +3.2%</div>
+              </div>
+              <div class="portal-product-card">
+                <div class="prod-label">Cesantías</div>
+                <div class="prod-amount">$8.750.000</div>
+                <div class="prod-sub">Año gravable 2025</div>
+              </div>
+              <div class="portal-product-card">
+                <div class="prod-label">CDT Skandia</div>
+                <div class="prod-amount">$5.000.000</div>
+                <div class="prod-sub">Vence: 15 dic 2026</div>
+              </div>
+            </div>
+
+            <!-- TARJETA DE ENTRADA KIDS -->
+            <div class="kids-desktop-entry" onclick="goToDesktopScreen('screen-padre-p01')">
+              <div class="left-content">
+                <h3>Tu hijo aprende a manejar su plata. Tú siempre sabes cómo va.</h3>
+                <p>Activa el espacio de Valentina y acompáñalo en su camino financiero.</p>
+              </div>
+              <button class="entry-btn">Activar para mi hijo/hija</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== P01: Activación parental — Landing ====== -->
+        <div class="desktop-screen" id="screen-padre-p01" data-flow="padre" data-label="P01 · Activación parental">
+          <div class="p01-landing">
+
+            <!-- Sección 1: Hero -->
+            <section class="p01-section p01-hero">
+              <div class="p01-inner">
+                <div class="p01-hero-badge"><i class="fa-solid fa-star" style="font-size:10px"></i> Nuevo · Skandia Kids</div>
+                <h1>Crea la billetera de tu hijo/hija en Skandia</h1>
+                <p class="p01-hero-subtitle">Un espacio financiero dentro de tu cuenta, donde tu hijo/hija aprende a manejar su plata practicando de verdad — con metas, retos y tu acompañamiento en cada paso.</p>
+                <button class="p01-btn-primary" onclick="goToDesktopScreen('screen-padre-p12')">
+                  <i class="fa-solid fa-rocket"></i> Activar la billetera de mi hijo/hija
+                </button>
+                <div class="p01-hero-microcopy">
+                  Sin costos adicionales <span>·</span> Dentro de tu cuenta Skandia <span>·</span> Tú controlas cada movimiento
+                </div>
+              </div>
+            </section>
+
+            <!-- Sección 2: Características -->
+            <section class="p01-section p01-features" id="p01-features">
+              <div class="p01-inner">
+                <h2 class="p01-section-heading">¿Qué incluye la billetera?</h2>
+                <div class="p01-features-grid">
+
+                  <div class="p01-feature-card">
+                    <div class="feat-icon"><i class="fa-solid fa-wallet"></i></div>
+                    <div class="feat-title">Su propio espacio</div>
+                    <p class="feat-desc">Un lugar dedicado dentro de tu cuenta Skandia, solo para él/ella.</p>
+                  </div>
+
+                  <div class="p01-feature-card">
+                    <div class="feat-icon"><i class="fa-solid fa-bullseye"></i></div>
+                    <div class="feat-title">Metas de ahorro</div>
+                    <p class="feat-desc">Crea metas con nombre, monto y fecha. Ve el progreso en tiempo real.</p>
+                  </div>
+
+                  <div class="p01-feature-card">
+                    <div class="feat-icon"><i class="fa-solid fa-gamepad"></i></div>
+                    <div class="feat-title">Aprende jugando</div>
+                    <p class="feat-desc">Retos prácticos de finanzas que se completan haciendo, no leyendo.</p>
+                  </div>
+
+                  <div class="p01-feature-card">
+                    <div class="feat-icon"><i class="fa-solid fa-lock"></i></div>
+                    <div class="feat-title">Tú apruebas todo</div>
+                    <p class="feat-desc">Cada movimiento de plata requiere tu PIN. Nada se mueve sin ti.</p>
+                  </div>
+
+                  <div class="p01-feature-card">
+                    <div class="feat-icon"><i class="fa-solid fa-eye"></i></div>
+                    <div class="feat-title">Visibilidad total</div>
+                    <p class="feat-desc">Ves el saldo, las metas y los movimientos de tu hijo/hija en cualquier momento.</p>
+                  </div>
+
+                  <div class="p01-feature-card">
+                    <div class="feat-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                    <div class="feat-title">Aportes en familia</div>
+                    <p class="feat-desc">Tú y otros familiares pueden sumar plata a su billetera con tu validación.</p>
+                  </div>
+
+                </div>
+              </div>
+            </section>
+
+            <!-- Sección 3: CTA secundario -->
+            <section class="p01-section p01-cta-section">
+              <div class="p01-inner">
+                <h2>¿Listo para empezar?</h2>
+                <p class="p01-cta-subtitle">Activa la billetera en menos de 2 minutos. Tu hijo/hija podrá entrar desde la app Skandia.</p>
+                <div class="p01-cta-buttons">
+                  <button class="p01-btn-primary" onclick="goToDesktopScreen('screen-padre-p12')">
+                    <i class="fa-solid fa-rocket"></i> Activar la billetera de mi hijo/hija
+                  </button>
+                  <button class="p01-btn-secondary" onclick="document.getElementById('p01-features').scrollIntoView({behavior:'smooth'})">
+                    Ver cómo funciona
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- Sección 4: Cursos Skandia Channel -->
+            <section class="p01-section p01-courses">
+              <div class="p01-inner">
+                <h2 class="p01-section-heading">Prepárate para acompañar a tu hijo/hija</h2>
+                <p class="p01-courses-subtitle">Dos cursos gratuitos para entender finanzas infantiles antes de activar la billetera.</p>
+                <div class="p01-courses-grid">
+
+                  <div class="p01-course-card">
+                    <div class="course-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <span class="course-badge">Gratis</span>
+                    <div class="course-name">Educación Financiera Infantil</div>
+                    <p class="course-desc">Aprende cómo hablar de dinero con tu hijo/hija según su edad.</p>
+                    <a class="course-cta" href="https://channel.skandia.com.co/course/educacion-financiera-infantil" target="_blank" rel="noopener noreferrer">
+                      Ir al curso <i class="fa-solid fa-arrow-right" style="font-size:11px"></i>
+                    </a>
+                  </div>
+
+                  <div class="p01-course-card">
+                    <div class="course-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <span class="course-badge">Gratis</span>
+                    <div class="course-name">Finanzas para Niños</div>
+                    <p class="course-desc">Estrategias para que tu hijo entienda el ahorro y la inversión desde pequeño.</p>
+                    <a class="course-cta" href="https://channel.skandia.com.co/course/finanzas-para-ninos" target="_blank" rel="noopener noreferrer">
+                      Ir al curso <i class="fa-solid fa-arrow-right" style="font-size:11px"></i>
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+            </section>
+
+          </div><!-- /p01-landing -->
+        </div>
+
+        <!-- ====== P12: Dashboard parental ====== -->
+        <div class="desktop-screen" id="screen-padre-p12" data-flow="padre" data-label="P12 · Dashboard parental">
+          <div style="flex:1;width:100%">
+            <div class="desktop-page-title">Así va Valentina</div>
+            <div class="desktop-page-sub">Aquí ves un resumen de sus metas y movimientos. Entra a su canal para ver todo el detalle.</div>
+
+            <!-- Alerta de solicitud pendiente -->
+            <div class="alert-card">
+              <i class="fa-solid fa-bell"></i>
+              <div style="flex:1">
+                <div class="alert-title">Valentina quiere sumar $112.000 a 'Mis AirPods'. Tienes una solicitud pendiente.</div>
+                <div class="alert-sub">Confirma con tu PIN para procesar el traslado.</div>
+              </div>
+              <button class="btn btn-primary btn-sm" style="width:auto;min-width:140px" onclick="showPinModal('aporte')">Ver solicitud</button>
+            </div>
+
+            <div class="desktop-card-row">
+              <div class="desktop-full-card">
+                <div style="font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;margin-bottom:var(--space-3)">Metas activas</div>
+
+                <div style="margin-bottom:var(--space-3)">
+                  <div class="flex-between mb-1">
+                    <div style="font-weight:600;font-size:15px">Mis AirPods</div>
+                    <span class="chip chip-green">En progreso</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--color-text-body-heading-2);margin-bottom:8px;">
+                    <span>$238.000 de $350.000</span>
+                    <span style="font-weight:700;color:var(--color-primary-green-00)">68%</span>
+                  </div>
+                  <div class="progress-wrap" style="height:10px">
+                    <div class="progress-bar" style="width:68%;height:10px"></div>
+                  </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;margin-bottom:var(--space-2)">Último movimiento</div>
+                <div style="display:flex;align-items:center;gap:12px;font-size:14px;">
+                  <div style="width:36px;height:36px;background:var(--color-bg-brand-light);border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-plus text-green" style="font-size:14px"></i></div>
+                  <div style="flex:1">
+                    <div style="font-weight:600">Aporte recibido</div>
+                    <div style="font-size:12px;color:var(--color-text-body-heading-2)">hace 3 días</div>
+                  </div>
+                  <div style="font-weight:700;color:var(--color-primary-green-00)">+$50.000</div>
+                </div>
+
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:16px">
+                <div class="desktop-full-card" style="text-align:center">
+                  <div style="font-size:12px;color:var(--color-text-body-heading-2);margin-bottom:4px">Saldo de tu billetera</div>
+                  <div style="font-family:'Montserrat',sans-serif;font-size:28px;font-weight:700;color:var(--color-text-heading)">$412.500</div>
+                  <div style="font-size:12px;color:var(--color-primary-green-00);margin-top:4px">Valentina · 16 años</div>
+                </div>
+
+                <button class="btn btn-primary" style="height:48px" onclick="goToDesktopScreen('screen-padre-p12')">Ver canal de Valentina</button>
+                <button class="btn btn-secondary" style="height:44px" onclick="showPinModal('aporte-directo')">Sumar plata directamente</button>
+              </div>
+            </div>
+
+            <!-- Sección cursos Skandia Channel -->
+            <div class="channel-section">
+              <div class="channel-section-title">Aprende a guiar a Valentina</div>
+              <div class="channel-section-sub">Dos cursos gratuitos para acompañar el aprendizaje financiero de tu hijo/a</div>
+              <div class="channel-courses-grid">
+
+                <!-- Curso 1 -->
+                <div class="channel-course-card">
+                  <div class="course-card-icon"><i class="fa-solid fa-book-open"></i></div>
+                  <span class="course-card-badge"><i class="fa-solid fa-tag" style="font-size:9px"></i> Gratis</span>
+                  <div class="course-card-name">Educación Financiera Infantil</div>
+                  <div class="course-card-desc">Aprende cómo hablar de dinero con tu hijo/a, crear hábitos desde temprano y acompañar sus primeras decisiones financieras.</div>
+                  <a class="course-card-cta" href="https://channel.skandia.com.co/course/educacion-financiera-infantil" target="_blank" rel="noopener noreferrer">
+                    Ir al curso <i class="fa-solid fa-arrow-right" style="font-size:11px"></i>
+                  </a>
+                </div>
+
+                <!-- Curso 2 -->
+                <div class="channel-course-card">
+                  <div class="course-card-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                  <span class="course-card-badge"><i class="fa-solid fa-tag" style="font-size:9px"></i> Gratis</span>
+                  <div class="course-card-name">Finanzas para Niños</div>
+                  <div class="course-card-desc">Herramientas prácticas para enseñar ahorro, metas y el valor del dinero a niños y adolescentes de forma divertida.</div>
+                  <a class="course-card-cta" href="https://channel.skandia.com.co/course/finanzas-para-ninos" target="_blank" rel="noopener noreferrer">
+                    Ir al curso <i class="fa-solid fa-arrow-right" style="font-size:11px"></i>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+            <!-- /Sección cursos -->
+
+          </div>
+        </div>
+
+        <!-- ====== P07: Aporte directo padre ====== -->
+        <div class="desktop-screen" id="screen-padre-p07" data-flow="padre" data-label="P07 · Aporte directo padre">
+          <div style="max-width:540px">
+            <div class="desktop-page-title">Suma plata a la billetera de Valentina</div>
+            <div class="desktop-page-sub">El dinero saldrá de tu cuenta vinculada. Valentina verá el cambio en su billetera.</div>
+
+            <div class="desktop-full-card mb-3">
+              <div class="field-wrap mb-3">
+                <label class="field-label">Monto a sumar</label>
+                <input class="field-input" type="text" placeholder="$0">
+              </div>
+              <div class="field-wrap mb-3">
+                <label class="field-label">Cuenta origen</label>
+                <select class="field-input">
+                  <option>Cuenta de ahorros · ****4521</option>
+                  <option>Pensión voluntaria · ****8834</option>
+                </select>
+              </div>
+              <div style="background:var(--color-bg-grey-light);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--color-text-body-heading-2);">
+                <i class="fa-solid fa-circle-info text-green" style="margin-right:6px"></i>
+                Valentina verá el cambio en su billetera inmediatamente después de tu confirmación.
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;align-items:center;">
+              <button class="btn btn-primary" style="max-width:220px;height:48px" onclick="showPinModal('aporte-directo')">Confirmar con PIN</button>
+              <button class="btn btn-ghost" onclick="goToDesktopScreen('screen-padre-p12')">Cancelar</button>
+            </div>
+            <div style="font-size:11px;color:var(--color-text-body-heading-2);margin-top:12px;">Operación realizada bajo normativa vigente para productos de menores de edad.</div>
+          </div>
+        </div>
+
+      </div><!-- /desktop-main -->
+    </div><!-- /desktop-content -->
+  </div><!-- /desktop-shell -->
+</div><!-- /padre-stage -->
+
+
+<!-- ===== PIN MODAL ===== -->
+<div class="pin-modal-overlay" id="pin-modal" style="display:none" onclick="closePinModalOutside(event)">
+  <div class="pin-modal">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--space-2);">
+      <div></div>
+      <button onclick="closePinModal()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--color-icon-medium)"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <h3 id="pin-modal-title">Valentina quiere sumar $112.000 a su billetera</h3>
+    <p id="pin-modal-sub">El dinero saldría de tu cuenta vinculada. Confirma con tu PIN para procesar.</p>
+
+    <div class="field-wrap mb-3">
+      <label class="field-label">Ingresa tu PIN</label>
+      <input class="field-input pin-field" type="password" maxlength="6" placeholder="······">
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:var(--space-2);">
+      <button class="btn btn-primary" style="flex:1;height:48px" onclick="confirmPin()">Confirmar con PIN</button>
+    </div>
+    <button class="btn btn-secondary btn-sm w-full" style="height:40px" onclick="closePinModal()">Ver detalles de la billetera</button>
+
+    <div style="font-size:11px;color:var(--color-text-body-heading-2);text-align:center;margin-top:var(--space-2);">
+      Operación realizada bajo normativa vigente para productos de menores de edad.
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // ===== STATE =====
+  let currentFlow = 'adol';
+  const adolScreens = [
+    'screen-adol-p00','screen-adol-p02','screen-adol-p03','screen-adol-p04',
+    'screen-adol-p05','screen-adol-p06a','screen-adol-p08a',
+    'screen-adol-p09','screen-adol-p10','screen-adol-p11',
+    'screen-adol-leccion-1'
+  ];
+  let leccion1Progress = 0;
+  const padreScreens = [
+    'screen-padre-p00','screen-padre-p01','screen-padre-p12','screen-padre-p07'
+  ];
+  let currentAdolIndex = 0;
+  let currentPadreIndex = 0;
+
+  // ===== FLOW SWITCH =====
+  function switchFlow(flow) {
+    currentFlow = flow;
+    document.querySelectorAll('.flow-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('adol-stage').style.display = flow === 'adol' ? 'flex' : 'none';
+    document.getElementById('padre-stage').style.display = flow === 'padre' ? 'flex' : 'none';
+    updateIndicator();
+  }
+
+  // ===== SCREEN NAVIGATION =====
+  function goToScreen(id) {
+    adolScreens.forEach(sid => {
+      const el = document.getElementById(sid);
+      if (el) el.classList.remove('active');
+    });
+    const target = document.getElementById(id);
+    if (target) {
+      target.classList.add('active');
+      currentAdolIndex = adolScreens.indexOf(id);
+      updateIndicator();
+    }
+  }
+
+  function goToDesktopScreen(id) {
+    padreScreens.forEach(sid => {
+      const el = document.getElementById(sid);
+      if (el) el.classList.remove('active');
+    });
+    const target = document.getElementById(id);
+    if (target) {
+      target.classList.add('active');
+      currentPadreIndex = padreScreens.indexOf(id);
+      updateSidebarActive(id);
+      updateIndicator();
+    }
+  }
+
+  function updateSidebarActive(screenId) {
+    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active-nav'));
+    if (screenId === 'screen-padre-p01') document.getElementById('sidebar-kids').classList.add('active-nav');
+  }
+
+  function nextScreen() {
+    if (currentFlow === 'adol') {
+      currentAdolIndex = Math.min(currentAdolIndex + 1, adolScreens.length - 1);
+      goToScreen(adolScreens[currentAdolIndex]);
+    } else {
+      currentPadreIndex = Math.min(currentPadreIndex + 1, padreScreens.length - 1);
+      goToDesktopScreen(padreScreens[currentPadreIndex]);
+    }
+  }
+
+  function prevScreen() {
+    if (currentFlow === 'adol') {
+      currentAdolIndex = Math.max(currentAdolIndex - 1, 0);
+      goToScreen(adolScreens[currentAdolIndex]);
+    } else {
+      currentPadreIndex = Math.max(currentPadreIndex - 1, 0);
+      goToDesktopScreen(padreScreens[currentPadreIndex]);
+    }
+  }
+
+  function updateIndicator() {
+    const el = document.getElementById('screen-indicator');
+    if (currentFlow === 'adol') {
+      const screen = document.getElementById(adolScreens[currentAdolIndex]);
+      const label = screen ? screen.dataset.label : '';
+      el.textContent = (currentAdolIndex + 1) + ' / ' + adolScreens.length + ' · ' + label;
+    } else {
+      const screen = document.getElementById(padreScreens[currentPadreIndex]);
+      const label = screen ? screen.dataset.label : '';
+      el.textContent = (currentPadreIndex + 1) + ' / ' + padreScreens.length + ' · ' + label;
+    }
+  }
+
+  // ===== TOAST =====
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('visible'), 3000);
+  }
+
+  // ===== PIN MODAL =====
+  let pinModalContext = '';
+  function showPinModal(ctx) {
+    pinModalContext = ctx;
+    const titleEl = document.getElementById('pin-modal-title');
+    const subEl = document.getElementById('pin-modal-sub');
+    if (ctx === 'aporte') {
+      titleEl.textContent = 'Valentina quiere sumar $112.000 a su billetera';
+      subEl.textContent = 'El dinero saldría de tu cuenta vinculada. Confirma con tu PIN para procesar.';
+    } else if (ctx === 'aporte-directo') {
+      titleEl.textContent = 'Suma plata a la billetera de Valentina';
+      subEl.textContent = 'El dinero saldrá de tu cuenta vinculada. Valentina verá el cambio en su billetera.';
+    }
+    document.getElementById('pin-modal').style.display = 'flex';
+  }
+  function closePinModal() {
+    document.getElementById('pin-modal').style.display = 'none';
+  }
+  function closePinModalOutside(e) {
+    if (e.target === document.getElementById('pin-modal')) closePinModal();
+  }
+  function confirmPin() {
+    closePinModal();
+    if (pinModalContext === 'aporte') {
+      showToast('Listo. Confirmaste el aporte de $112.000 a la billetera de Valentina.');
+    } else {
+      showToast('Listo. Sumaste plata a la billetera de Valentina. Ella ya puede verlo.');
+    }
+    setTimeout(() => goToDesktopScreen('screen-padre-p12'), 1000);
+  }
+
+  // ===== LECCIÓN 1 — LÓGICA DE PREGUNTA =====
+  function checkAnswer(selectedIndex) {
+    // Limpiar selección previa
+    [0, 1, 2].forEach(i => {
+      const card = document.getElementById('opcion-' + i);
+      if (card) card.classList.remove('correcta');
+    });
+
+    const correctIndex = 1; // "Para lograr algo que quiero"
+
+    if (selectedIndex === correctIndex) {
+      // Respuesta correcta
+      const card = document.getElementById('opcion-' + selectedIndex);
+      if (card) card.classList.add('correcta');
+      document.getElementById('feedback-exito').style.display = 'flex';
+      document.getElementById('feedback-intento').style.display = 'none';
+      document.getElementById('cta-siguiente').style.display = 'block';
+    } else {
+      // Respuesta incorrecta
+      document.getElementById('feedback-exito').style.display = 'none';
+      document.getElementById('feedback-intento').style.display = 'flex';
+      document.getElementById('cta-siguiente').style.display = 'none';
+    }
+  }
+
+  function completarPaso1() {
+    // Actualizar progreso de lección 1
+    leccion1Progress = 25;
+    const bar = document.getElementById('leccion1-progress-bar');
+    if (bar) bar.style.width = leccion1Progress + '%';
+
+    // Mostrar toast de logro
+    showToast('Paso 1 completado · +10 puntos');
+
+    // Volver al dashboard con pequeño retraso
+    setTimeout(() => {
+      // Resetear estado de la pantalla lección para posibles revisitas
+      [0, 1, 2].forEach(i => {
+        const card = document.getElementById('opcion-' + i);
+        if (card) card.classList.remove('correcta');
+      });
+      document.getElementById('feedback-exito').style.display = 'none';
+      document.getElementById('feedback-intento').style.display = 'none';
+      document.getElementById('cta-siguiente').style.display = 'none';
+      goToScreen('screen-adol-p04');
+    }, 1800);
+  }
+
+  // ===== INIT =====
+  updateIndicator();
+</script>
+</body>
+</html>

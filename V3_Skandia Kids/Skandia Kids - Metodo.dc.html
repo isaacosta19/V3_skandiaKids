@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="assets/colors_and_type.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #dcdcdc; border-radius: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+</helmet>
+
+<div style="height:100vh; display:flex; flex-direction:column; font-family:'Open Sans',sans-serif; background:#f7f7f7; color:#404040; -webkit-font-smoothing:antialiased;">
+
+  <!-- ===== Top app bar ===== -->
+  <header style="height:60px; flex:none; background:#fff; border-bottom:1px solid #e9e9e9; display:flex; align-items:center; padding:0 24px; gap:16px; z-index:20;">
+    <img src="assets/logo-color.svg" alt="Skandia" style="height:26px; cursor:pointer;" onClick="{{ goPortal }}" />
+    <div style="margin-left:auto; display:flex; align-items:center; gap:18px;">
+      <button style="position:relative; background:transparent; border:none; padding:8px; cursor:pointer; color:#404040; line-height:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span style="position:absolute; top:6px; right:6px; width:8px; height:8px; background:#e03430; border-radius:50%; border:1.5px solid #fff;"></span>
+      </button>
+      <div style="width:1px; height:28px; background:#e9e9e9;"></div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#00c73d,#8fe000); color:#fff; font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px; display:inline-flex; align-items:center; justify-content:center;">AL</span>
+        <div style="display:flex; flex-direction:column; line-height:1.25;">
+          <span style="font-size:13px; font-weight:600; color:#404040;">Andrés López</span>
+          <span style="font-size:11px; color:#878787;">Persona Natural</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Body: sidebar + main ===== -->
+  <div style="flex:1; display:flex; min-height:0;">
+
+    <!-- Sidebar -->
+    <aside style="width:248px; flex:none; background:#fff; border-right:1px solid #e9e9e9; padding:18px 14px; display:flex; flex-direction:column; gap:2px; overflow:auto;">
+      <div style="font-size:11px; font-weight:700; letter-spacing:.04em; color:#a5a5a5; padding:8px 12px 6px;">Menú</div>
+
+      <button onClick="{{ goPortal }}" style="{{ navInicio }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex:none;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+        Inicio
+      </button>
+      <button onClick="{{ goPortal }}" style="{{ navIdle }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex:none;"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"/><path d="M2 9v1c0 1.1.9 2 2 2h1"/><path d="M16 11h.01"/></svg>
+        Mis productos
+      </button>
+      <button onClick="{{ goPortal }}" style="{{ navIdle }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex:none;"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
+        Movimientos
+      </button>
+      <button onClick="{{ goPortal }}" style="{{ navIdle }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex:none;"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+        Asesoría
+      </button>
+
+      <div style="height:1px; background:#f0f0f0; margin:14px 8px;"></div>
+      <div style="font-size:11px; font-weight:700; letter-spacing:.04em; color:#a5a5a5; padding:2px 12px 6px;">Tu familia</div>
+
+      <button onClick="{{ goIntro }}" style="{{ navMetodo }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex:none;"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
+        Skandia Kids
+      </button>
+
+      <div style="margin-top:auto; padding:14px 8px 4px;">
+        <div style="background:#f6fcf2; border:1px solid #caf9cb; border-radius:12px; padding:14px;">
+          <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px; color:#007c26; margin-bottom:4px;">¿Necesitas ayuda?</div>
+          <div style="font-size:12px; color:#565656; line-height:1.5;">Habla con un asesor Skandia cuando quieras.</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main scroll area -->
+    <main ref="{{ mainRef }}" style="flex:1; min-width:0; height:100%; overflow:auto;">
+
+      <!-- ============================================================ -->
+      <!-- Portal home (banco)                                          -->
+      <!-- ============================================================ -->
+      <sc-if value="{{ isPortal }}" hint-placeholder-val="{{ true }}">
+      <div data-screen-label="Portal · Inicio" style="max-width:1120px; margin:0 auto; padding:36px 40px 64px;">
+        <p style="font-size:14px; color:#878787; margin:0 0 4px;">Bienvenido de nuevo,</p>
+        <h1 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:32px; color:#232323; margin:0 0 28px;">Andrés López</h1>
+
+        <!-- Resumen portafolio (realismo del portal, secundario) -->
+        <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:18px;">
+            <h3 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:18px; color:#404040; margin:0;">Resumen de tu portafolio</h3>
+            <a href="#" onClick="{{ noop }}" style="font-size:13px; color:#0099de; font-weight:600; text-decoration:none;">Ver todo</a>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+            <div style="grid-column:span 1; padding-right:16px; border-right:1px solid #f0f0f0;">
+              <div style="font-size:12px; color:#878787; margin-bottom:4px;">Saldo total</div>
+              <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:24px; color:#232323;">$ 49.350.000</div>
+              <div style="display:inline-flex; align-items:center; gap:4px; font-size:12px; font-weight:600; color:#03a835; margin-top:4px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:10px;height:10px;"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>+2,8% último mes</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:2px;"><span style="font-size:12px; color:#878787;">FPV Skandia</span><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#404040;">$ 24.580.000</span></div>
+            <div style="display:flex; flex-direction:column; gap:2px;"><span style="font-size:12px; color:#878787;">Renta Variable</span><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#404040;">$ 14.250.000</span></div>
+            <div style="display:flex; flex-direction:column; gap:2px;"><span style="font-size:12px; color:#878787;">Renta Fija Plus</span><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#404040;">$ 8.120.000</span></div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============================================================ -->
+      <!-- Skandia Kids · Estado inicial de la sección (banner)         -->
+      <!-- ============================================================ -->
+      <sc-if value="{{ isIntro }}">
+      <div data-screen-label="Skandia Kids · Inicio" style="max-width:1000px; margin:0 auto; padding:36px 40px 64px;">
+        <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:#878787; margin-bottom:18px;">
+          <span style="display:inline-flex; align-items:center; gap:6px; color:#00a531; font-weight:600;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>Skandia Kids</span>
+        </div>
+        <!-- Acceso al método (P01 · tarjeta destacada) -->
+        <div style="border-radius:16px; overflow:hidden; box-shadow:0 12px 32px -10px rgba(0,140,40,0.28); display:grid; grid-template-columns:1.15fr 1fr; margin-bottom:28px;">
+          <!-- Gradient panel -->
+          <div style="background:linear-gradient(140deg,#00c73d 0%,#5fed73 55%,#8fe000 100%); color:#fff; padding:34px 36px; display:flex; flex-direction:column;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+              <img src="assets/isotipo-simple-blanco.svg" alt="" style="height:22px;" />
+              <span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px;">Skandia Kids</span>
+              <span style="font-size:11px; font-weight:600; background:rgba(255,255,255,0.22); padding:3px 10px; border-radius:100px;">Para padres</span>
+            </div>
+            <h2 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:29px; line-height:1.18; margin:0 0 12px; max-width:18ch; text-wrap:pretty;">Enséñale a tu hijo a manejar su plata</h2>
+            <p style="font-size:16px; line-height:1.5; margin:0 0 8px; opacity:.96; max-width:34ch;">No necesitas tener todo resuelto. Te acompañamos a hacerlo, un paso a la vez.</p>
+            <p style="font-size:13px; line-height:1.5; margin:0 0 26px; opacity:.85;">Un método de Skandia para acompañarte como papá o mamá. Empieza en 3 minutos.</p>
+            <div style="margin-top:auto; display:flex; gap:12px; flex-wrap:wrap;">
+              <button onClick="{{ goDiag }}" style="background:#fff; color:#007c26; border:none; border-radius:100px; padding:13px 28px; font-family:'Open Sans',sans-serif; font-weight:700; font-size:15px; cursor:pointer; box-shadow:0 4px 12px -2px rgba(0,0,0,0.12);">Empezar</button>
+              <button onClick="{{ goDiag }}" style="background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,0.7); border-radius:100px; padding:13px 24px; font-family:'Open Sans',sans-serif; font-weight:600; font-size:15px; cursor:pointer;">Ver cómo funciona</button>
+            </div>
+          </div>
+          <!-- White value panel -->
+          <div style="background:#fff; padding:32px 34px; display:flex; flex-direction:column; justify-content:center; gap:18px;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px; color:#404040;">Así te acompaña el método</div>
+            <div style="display:flex; align-items:flex-start; gap:13px;">
+              <span style="width:38px; height:38px; flex:none; border-radius:10px; background:#f6fcf2; color:#00a531; display:inline-flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
+              <div><div style="font-weight:700; font-size:14px; color:#404040;">Una conversación a la vez</div><div style="font-size:13px; color:#666; line-height:1.45;">Pasos cortos, no clases. El método es acción.</div></div>
+            </div>
+            <div style="display:flex; align-items:flex-start; gap:13px;">
+              <span style="width:38px; height:38px; flex:none; border-radius:10px; background:#f6fcf2; color:#00a531; display:inline-flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+              <div><div style="font-weight:700; font-size:14px; color:#404040;">Tú decides el ritmo</div><div style="font-size:13px; color:#666; line-height:1.45;">Sin afán y sin exámenes. Avanzas cuando puedes.</div></div>
+            </div>
+            <div style="display:flex; align-items:flex-start; gap:13px;">
+              <span style="width:38px; height:38px; flex:none; border-radius:10px; background:#f6fcf2; color:#00a531; display:inline-flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg></span>
+              <div><div style="font-weight:700; font-size:14px; color:#404040;">No estás solo en esto</div><div style="font-size:13px; color:#666; line-height:1.45;">Te damos las palabras y qué hacer si se complica.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============================================================ -->
+      <!-- P02 · Diagnóstico (Etapa 0)                                   -->
+      <!-- ============================================================ -->
+      <sc-if value="{{ isDiag }}">
+      <div data-screen-label="P02 · Diagnóstico" style="max-width:720px; margin:0 auto; padding:32px 40px 64px;">
+        <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:#878787; margin-bottom:18px;">
+          <span style="display:inline-flex; align-items:center; gap:6px; color:#00a531; font-weight:600;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>Skandia Kids</span>
+          <span>·</span><span>Tu punto de partida</span>
+        </div>
+
+        <!-- progress -->
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:26px;">
+          <div style="flex:1; height:6px; background:#e9e9e9; border-radius:100px; overflow:hidden;"><div style="width:18%; height:100%; background:linear-gradient(90deg,#00c73d,#8fe000); border-radius:100px;"></div></div>
+          <span style="font-size:12px; color:#878787; white-space:nowrap;">Toma 3 min</span>
+        </div>
+
+        <h1 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:30px; color:#232323; margin:0 0 10px;">Empecemos por ti</h1>
+        <p style="font-size:16px; color:#565656; line-height:1.5; margin:0 0 28px; max-width:52ch;">Cuatro preguntas rápidas. No hay respuestas buenas ni malas — solo queremos acompañarte bien.</p>
+
+        <!-- Q1 -->
+        <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px; margin-bottom:16px;">
+          <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#404040; margin-bottom:14px;">¿Qué edad tiene tu hijo o hija?</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:100px; padding:9px 18px; font-size:14px;">8 – 11 años</span>
+            <span style="border:1.5px solid #00c73d; color:#007c26; background:#f6fcf2; font-weight:600; border-radius:100px; padding:9px 18px; font-size:14px; display:inline-flex; align-items:center; gap:7px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><path d="M20 6 9 17l-5-5"/></svg>12 – 14 años</span>
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:100px; padding:9px 18px; font-size:14px;">15 – 17 años</span>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px; margin-bottom:16px;">
+          <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#404040; margin-bottom:14px;">Hoy, ¿de dónde sale la plata que maneja?</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <span style="border:1.5px solid #00c73d; color:#007c26; background:#f6fcf2; font-weight:600; border-radius:10px; padding:12px 16px; font-size:14px; display:inline-flex; align-items:center; gap:9px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex:none;"><path d="M20 6 9 17l-5-5"/></svg>Mesada</span>
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:10px; padding:12px 16px; font-size:14px;">Le damos cuando pide</span>
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:10px; padding:12px 16px; font-size:14px;">Regalos</span>
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:10px; padding:12px 16px; font-size:14px;">Ya tiene ingresos propios</span>
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:10px; padding:12px 16px; font-size:14px; grid-column:span 2;">Todavía no maneja plata</span>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px; margin-bottom:16px;">
+          <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#404040; margin-bottom:14px;">¿Hablan de dinero en casa?</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:100px; padding:9px 18px; font-size:14px;">Sí, con confianza</span>
+            <span style="border:1.5px solid #00c73d; color:#007c26; background:#f6fcf2; font-weight:600; border-radius:100px; padding:9px 18px; font-size:14px; display:inline-flex; align-items:center; gap:7px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><path d="M20 6 9 17l-5-5"/></svg>A veces</span>
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:100px; padding:9px 18px; font-size:14px;">Casi nunca</span>
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:100px; padding:9px 18px; font-size:14px;">Es un tema incómodo</span>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px; margin-bottom:22px;">
+          <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#404040; margin-bottom:14px;">¿Qué es lo que más te inquieta de su futuro con el dinero?</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:100px; padding:9px 18px; font-size:14px;">Que no sepa ahorrar</span>
+            <span style="border:1.5px solid #00c73d; color:#007c26; background:#f6fcf2; font-weight:600; border-radius:100px; padding:9px 18px; font-size:14px; display:inline-flex; align-items:center; gap:7px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><path d="M20 6 9 17l-5-5"/></svg>Que gaste sin medir</span>
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:100px; padding:9px 18px; font-size:14px;">Que no esté listo para la universidad</span>
+            <span style="border:1px solid #e9e9e9; color:#565656; border-radius:100px; padding:9px 18px; font-size:14px;">Que repita mis errores</span>
+          </div>
+        </div>
+
+        <!-- autoconciencia note -->
+        <div style="display:flex; gap:13px; align-items:flex-start; background:#f3fce3; border-radius:12px; padding:16px 18px; margin-bottom:28px;">
+          <span style="color:#629a00; flex:none; margin-top:1px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></span>
+          <p style="margin:0; font-size:14px; color:#3a4a16; line-height:1.55;">Antes de empezar, algo que vale la pena tener en mente: lo que tu hijo aprende del dinero empieza por lo que tú le transmites sin darte cuenta. Por eso empezamos por ti.</p>
+        </div>
+
+        <div style="display:flex; flex-direction:column; align-items:flex-start; gap:10px;">
+          <button onClick="{{ goPartida }}" style="background:#00c73d; color:#fff; border:none; border-radius:100px; padding:14px 30px; font-family:'Open Sans',sans-serif; font-weight:700; font-size:16px; cursor:pointer;">Ver mi punto de partida</button>
+          <span style="font-size:13px; color:#878787;">Puedes cambiar estas respuestas cuando quieras.</span>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============================================================ -->
+      <!-- P03 · Tu punto de partida + recorrido de 7 etapas            -->
+      <!-- ============================================================ -->
+      <sc-if value="{{ isPartida }}">
+      <div data-screen-label="P03 · Tu punto de partida" style="max-width:760px; margin:0 auto; padding:32px 40px 64px;">
+        <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:#878787; margin-bottom:18px;">
+          <span style="display:inline-flex; align-items:center; gap:6px; color:#00a531; font-weight:600;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>Skandia Kids</span>
+        </div>
+
+        <h1 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:30px; color:#232323; margin:0 0 18px;">Este es tu punto de partida</h1>
+
+        <!-- lectura personalizada -->
+        <div style="background:linear-gradient(135deg,#f6fcf2,#f3fce3); border:1px solid #caf9cb; border-radius:16px; padding:24px 26px; margin-bottom:16px;">
+          <p style="margin:0; font-size:17px; color:#2c2c2c; line-height:1.6; text-wrap:pretty;">Tienes a <strong>Mariana, de 14 años</strong>, que ya maneja algo de plata, pero el tema del dinero todavía no fluye en casa. Es un muy buen momento para empezar — tienes tiempo de sobra para acompañarla.</p>
+        </div>
+
+        <!-- normalización -->
+        <div style="display:flex; gap:13px; align-items:flex-start; padding:4px 4px 0; margin-bottom:30px;">
+          <span style="color:#00a531; flex:none; margin-top:2px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg></span>
+          <p style="margin:0; font-size:14px; color:#565656; line-height:1.55;">Si sientes que no sabes bien por dónde empezar, es normal. A la mayoría de nosotros nadie nos enseñó esto. Por eso vamos paso a paso.</p>
+        </div>
+
+        <h2 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:20px; color:#404040; margin:0 0 4px;">Tu recorrido</h2>
+        <p style="font-size:14px; color:#878787; margin:0 0 24px;">Tu recorrido tiene 7 etapas. Avanzas a tu ritmo — sin afán.</p>
+
+        <!-- Recorrido vertical -->
+        <div style="position:relative; padding-left:2px; margin-bottom:32px;">
+          <div style="position:absolute; left:19px; top:20px; bottom:20px; width:2px; background:#e9e9e9; z-index:0;"></div>
+
+          <div style="position:relative; z-index:1; display:flex; gap:16px; align-items:flex-start; margin-bottom:18px;">
+            <span style="width:40px; height:40px; flex:none; border-radius:50%; background:linear-gradient(135deg,#00c73d,#8fe000); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px; box-shadow:0 0 0 4px #fff;">0</span>
+            <div style="padding-top:8px;"><div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#232323;">Tu punto de partida</span><span style="font-size:11px; font-weight:700; color:#007c26; background:#caf9cb; padding:3px 10px; border-radius:100px;">Estás aquí</span></div></div>
+          </div>
+
+          <div style="position:relative; z-index:1; display:flex; gap:16px; align-items:flex-start; margin-bottom:18px;">
+            <span style="width:40px; height:40px; flex:none; border-radius:50%; background:#fff; border:2px solid #00c73d; color:#007c26; display:inline-flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; box-shadow:0 0 0 4px #fff;">1</span>
+            <div style="padding-top:8px;"><div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#232323;">La primera conversación</span><span style="font-size:11px; font-weight:700; color:#878787;">Siguiente</span></div><div style="font-size:13px; color:#878787; margin-top:2px;">Que hablar de dinero deje de ser un tema raro.</div></div>
+          </div>
+
+          <div style="position:relative; z-index:1; display:flex; gap:16px; align-items:flex-start; margin-bottom:18px;">
+            <span style="width:40px; height:40px; flex:none; border-radius:50%; background:#fff; border:1px solid #ddd; color:#a5a5a5; display:inline-flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; box-shadow:0 0 0 4px #fff;">2</span>
+            <div style="padding-top:8px;"><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#565656;">Plata propia</span></div>
+          </div>
+
+          <div style="position:relative; z-index:1; display:flex; gap:16px; align-items:flex-start; margin-bottom:18px;">
+            <span style="width:40px; height:40px; flex:none; border-radius:50%; background:#fff; border:1px solid #ddd; color:#a5a5a5; display:inline-flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; box-shadow:0 0 0 4px #fff;">3</span>
+            <div style="padding-top:8px;"><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#565656;">Decidir y equivocarse</span></div>
+          </div>
+
+          <div style="position:relative; z-index:1; display:flex; gap:16px; align-items:flex-start; margin-bottom:18px;">
+            <span style="width:40px; height:40px; flex:none; border-radius:50%; background:#fff; border:1px solid #ddd; color:#a5a5a5; display:inline-flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; box-shadow:0 0 0 4px #fff;">4</span>
+            <div style="padding-top:8px;"><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#565656;">Metas</span></div>
+          </div>
+
+          <div style="position:relative; z-index:1; display:flex; gap:16px; align-items:flex-start; margin-bottom:18px;">
+            <span style="width:40px; height:40px; flex:none; border-radius:50%; background:#f5f5f5; border:1px solid #e9e9e9; color:#a5a5a5; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 0 0 4px #fff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+            <div style="padding-top:8px;"><div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#565656;">Hacer crecer</span><span style="font-size:11px; font-weight:600; color:#a36100; background:#fff3e0; padding:3px 10px; border-radius:100px;">Próximamente con tu coach</span></div></div>
+          </div>
+
+          <div style="position:relative; z-index:1; display:flex; gap:16px; align-items:flex-start;">
+            <span style="width:40px; height:40px; flex:none; border-radius:50%; background:#fff; border:1px solid #ddd; color:#a5a5a5; display:inline-flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; box-shadow:0 0 0 4px #fff;">6</span>
+            <div style="padding-top:8px;"><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#565656;">Rumbo a los 18</span></div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button onClick="{{ goEtapa }}" style="background:#00c73d; color:#fff; border:none; border-radius:100px; padding:14px 30px; font-family:'Open Sans',sans-serif; font-weight:700; font-size:16px; cursor:pointer;">Empezar la primera conversación</button>
+          <button onClick="{{ goMetodo }}" style="background:transparent; color:#007c26; border:1.5px solid #00c73d; border-radius:100px; padding:14px 26px; font-family:'Open Sans',sans-serif; font-weight:600; font-size:16px; cursor:pointer;">Ir a mi tablero</button>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============================================================ -->
+      <!-- P04 · Home del método / Tablero del educador                 -->
+      <!-- ============================================================ -->
+      <sc-if value="{{ isMetodo }}">
+      <div data-screen-label="P04 · Tablero del método" style="max-width:1000px; margin:0 auto; padding:36px 40px 64px;">
+        <p style="font-size:14px; color:#878787; margin:0 0 2px;">Tu método</p>
+        <h1 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:30px; color:#232323; margin:0 0 26px;">Hola, Andrés</h1>
+
+        <!-- HERO · micro-acción de la semana -->
+        <div style="position:relative; overflow:hidden; background:linear-gradient(135deg,#f6fcf2 0%,#ffffff 60%); border:2px solid #00c73d; border-radius:18px; padding:30px 32px; margin-bottom:28px; box-shadow:0 10px 28px -12px rgba(0,140,40,0.25);">
+          <div style="position:absolute; right:-30px; top:-30px; width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg,#00c73d,#8fe000); opacity:.10;"></div>
+          <div style="position:relative;">
+            <span style="display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:700; color:#007c26; background:#caf9cb; padding:5px 13px; border-radius:100px; margin-bottom:16px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>Tu paso de esta semana</span>
+            <h2 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:25px; color:#232323; margin:0 0 10px; max-width:24ch; text-wrap:pretty;">Pregúntale a Mariana en qué se le va la plata</h2>
+            <p style="font-size:16px; color:#3c4a3e; line-height:1.55; margin:0 0 24px; max-width:56ch;">No tienes que explicarle nada todavía. Solo escuchar. Te toma 5 minutos en cualquier momento del día.</p>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <button onClick="{{ goConversa }}" style="background:#00c73d; color:#fff; border:none; border-radius:100px; padding:13px 28px; font-family:'Open Sans',sans-serif; font-weight:700; font-size:15px; cursor:pointer;">Ver cómo hacerlo</button>
+              <button onClick="{{ goRegistro }}" style="background:transparent; color:#007c26; border:1.5px solid #00c73d; border-radius:100px; padding:13px 24px; font-family:'Open Sans',sans-serif; font-weight:600; font-size:15px; cursor:pointer;">Ya lo hice</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two columns -->
+        <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:24px;">
+          <!-- Recorrido -->
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px;">
+              <h3 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:18px; color:#404040; margin:0;">Tu recorrido</h3>
+              <a href="#" onClick="{{ goPartidaLink }}" style="font-size:13px; color:#0099de; font-weight:600; text-decoration:none;">Ver las 7 etapas</a>
+            </div>
+
+            <div onClick="{{ goEtapa }}" style="background:#fff; border:1px solid #e9e9e9; border-radius:14px; padding:18px 20px; margin-bottom:12px; cursor:pointer; display:flex; align-items:center; gap:16px;" style-hover="box-shadow:0 8px 22px -10px rgba(0,0,0,0.15); border-color:#caf9cb;">
+              <span style="width:42px; height:42px; flex:none; border-radius:50%; background:#fff; border:2px solid #00c73d; color:#007c26; display:inline-flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px;">1</span>
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#232323;">Etapa 1 · La primera conversación</span><span style="font-size:11px; font-weight:700; color:#007c26; background:#caf9cb; padding:3px 10px; border-radius:100px;">En curso</span></div>
+                <div style="font-size:13px; color:#878787; margin-top:3px;">Que hablar de dinero deje de ser un tema raro.</div>
+              </div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#a5a5a5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex:none;"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+
+            <div style="background:#fafafa; border:1px solid #f0f0f0; border-radius:14px; padding:18px 20px; display:flex; align-items:center; gap:16px;">
+              <span style="width:42px; height:42px; flex:none; border-radius:50%; background:#fff; border:1px solid #ddd; color:#a5a5a5; display:inline-flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px;">2</span>
+              <div style="flex:1;">
+                <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#565656;">Etapa 2 · Plata propia</div>
+                <div style="font-size:13px; color:#a5a5a5; margin-top:3px;">Te falta poco para llegar.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progreso del educador -->
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="background:#fff; border:1px solid #e9e9e9; border-radius:14px; padding:20px;">
+              <h4 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:15px; color:#404040; margin:0 0 14px;">Cómo vas como educador</h4>
+              <div style="display:flex; gap:18px; margin-bottom:14px;">
+                <div><div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:26px; color:#00a531; line-height:1;">1</div><div style="font-size:12px; color:#878787; margin-top:4px;">conversación<br/>con Mariana</div></div>
+                <div style="width:1px; background:#f0f0f0;"></div>
+                <div><div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:26px; color:#00a531; line-height:1;">1</div><div style="font-size:12px; color:#878787; margin-top:4px;">paso<br/>completado</div></div>
+              </div>
+              <p style="font-size:13px; color:#565656; line-height:1.5; margin:0 0 4px;">Empezaste tu recorrido. Vas muy bien.</p>
+            </div>
+
+            <div style="display:flex; gap:11px; align-items:flex-start; background:#f6fcf2; border-radius:12px; padding:15px 16px;">
+              <span style="color:#00a531; flex:none; margin-top:1px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+              <p style="margin:0; font-size:13px; color:#3a4a16; line-height:1.5;">No hay afán. Cada conversación cuenta, así sea corta.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============================================================ -->
+      <!-- P05 · Detalle de etapa (Etapa 1)                              -->
+      <!-- ============================================================ -->
+      <sc-if value="{{ isEtapa }}">
+      <div data-screen-label="P05 · Detalle de etapa" style="max-width:1000px; margin:0 auto; padding:28px 40px 64px;">
+        <button onClick="{{ goMetodo }}" style="display:inline-flex; align-items:center; gap:7px; background:transparent; border:none; color:#666; font-family:'Open Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; padding:6px 0; margin-bottom:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="m15 18-6-6 6-6"/></svg>Volver al tablero</button>
+
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+          <span style="font-size:12px; font-weight:700; color:#007c26; background:#caf9cb; padding:4px 12px; border-radius:100px;">Etapa 1</span>
+          <span style="font-size:12px; font-weight:600; color:#878787;">En curso</span>
+        </div>
+        <h1 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:30px; color:#232323; margin:0 0 8px;">La primera conversación</h1>
+        <p style="font-size:16px; color:#565656; line-height:1.5; margin:0 0 28px; max-width:60ch;">Abrir el tema del dinero con tu hijo sin que se sienta un sermón. Que sea una charla, no una clase.</p>
+
+        <div style="display:grid; grid-template-columns:1.45fr 1fr; gap:24px; align-items:start;">
+          <!-- Anatomía -->
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px;">
+              <div style="font-size:12px; font-weight:700; letter-spacing:.03em; color:#a5a5a5; margin-bottom:8px;">La idea que vas a sembrar</div>
+              <p style="margin:0; font-size:15px; color:#404040; line-height:1.6;">Que hablar de dinero es normal y se puede hacer con confianza. En muchas casas es un tema tabú; aquí lo abrimos con naturalidad.</p>
+            </div>
+
+            <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px;">
+              <div style="font-size:12px; font-weight:700; letter-spacing:.03em; color:#a5a5a5; margin-bottom:10px;">Cómo saber si tu hijo está listo</div>
+              <div style="display:flex; gap:12px; align-items:flex-start;">
+                <span style="color:#00a531; flex:none; margin-top:1px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;"><path d="M9 12a1 1 0 1 0 2 0V8a1 1 0 1 0-2 0Z"/><circle cx="12" cy="12" r="10"/><path d="M12 16h.01"/></svg></span>
+                <p style="margin:0; font-size:15px; color:#404040; line-height:1.6;">Siempre lo está. No necesita saber nada para conversar. El que se prepara aquí eres tú, no él.</p>
+              </div>
+            </div>
+
+            <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px;">
+              <div style="font-size:12px; font-weight:700; letter-spacing:.03em; color:#a5a5a5; margin-bottom:8px;">La conversación clave</div>
+              <p style="margin:0 0 14px; font-size:15px; color:#404040; line-height:1.6;">Una charla corta para romper el hielo con el tema del dinero. Te damos por dónde empezar según cómo sea tu hijo.</p>
+              <button onClick="{{ goConversa }}" style="display:inline-flex; align-items:center; gap:8px; background:transparent; color:#007c26; border:1.5px solid #00c73d; border-radius:100px; padding:10px 20px; font-family:'Open Sans',sans-serif; font-weight:600; font-size:14px; cursor:pointer;">Ver la conversación<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+            </div>
+
+            <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px;">
+              <div style="font-size:12px; font-weight:700; letter-spacing:.03em; color:#a5a5a5; margin-bottom:8px;">En qué te acompañamos</div>
+              <p style="margin:0; font-size:15px; color:#404040; line-height:1.6;">Te damos las primeras frases para arrancar y qué hacer si la charla se pone incómoda. No estás solo en esto.</p>
+            </div>
+          </div>
+
+          <!-- Right · paso de la semana + CTAs (sticky) -->
+          <div style="position:sticky; top:24px; display:flex; flex-direction:column; gap:16px;">
+            <div style="background:linear-gradient(135deg,#f6fcf2,#fff); border:2px solid #00c73d; border-radius:16px; padding:22px 24px;">
+              <span style="display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:700; color:#007c26; background:#caf9cb; padding:4px 12px; border-radius:100px; margin-bottom:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>Tu paso de esta semana</span>
+              <p style="margin:0 0 18px; font-size:16px; color:#2c2c2c; line-height:1.55; font-weight:600;">Saca el tema una vez, sin agenda. Pregúntale algo sencillo sobre su plata y solo escucha.</p>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <button onClick="{{ goConversa }}" style="background:#00c73d; color:#fff; border:none; border-radius:100px; padding:12px 22px; font-family:'Open Sans',sans-serif; font-weight:700; font-size:15px; cursor:pointer; width:100%;">Ver la conversación</button>
+                <button onClick="{{ goRegistro }}" style="background:transparent; color:#007c26; border:1.5px solid #00c73d; border-radius:100px; padding:12px 22px; font-family:'Open Sans',sans-serif; font-weight:600; font-size:15px; cursor:pointer; width:100%;">Registrar mi paso</button>
+              </div>
+            </div>
+            <div style="background:#fff; border:1px solid #e9e9e9; border-radius:14px; padding:18px 20px;">
+              <div style="font-size:12px; font-weight:700; letter-spacing:.03em; color:#a5a5a5; margin-bottom:6px;">Hacia dónde vamos</div>
+              <p style="margin:0; font-size:14px; color:#565656; line-height:1.55;">Que hablar de plata con Mariana deje de ser un tema raro entre ustedes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============================================================ -->
+      <!-- P06 · La conversación / guion (Etapa 1)                       -->
+      <!-- ============================================================ -->
+      <sc-if value="{{ isConversa }}">
+      <div data-screen-label="P06 · La conversación" style="max-width:760px; margin:0 auto; padding:28px 40px 64px;">
+        <button onClick="{{ goEtapa }}" style="display:inline-flex; align-items:center; gap:7px; background:transparent; border:none; color:#666; font-family:'Open Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; padding:6px 0; margin-bottom:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="m15 18-6-6 6-6"/></svg>Volver a la etapa</button>
+
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+          <span style="font-size:12px; font-weight:700; color:#007c26; background:#caf9cb; padding:4px 12px; border-radius:100px;">Etapa 1</span>
+        </div>
+        <h1 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:30px; color:#232323; margin:0 0 14px;">La primera conversación</h1>
+
+        <div style="display:flex; gap:12px; align-items:flex-start; background:#f7f7f7; border:1px solid #ededed; border-radius:12px; padding:15px 18px; margin-bottom:18px;">
+          <span style="color:#878787; flex:none; margin-top:1px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
+          <p style="margin:0; font-size:14px; color:#565656; line-height:1.55;">No tienes que decir esto al pie de la letra. Son puntos de partida — di lo tuyo, a tu manera.</p>
+        </div>
+
+        <p style="font-size:16px; color:#404040; line-height:1.6; margin:0 0 28px; max-width:62ch;">Esta primera vez no se trata de explicar nada. Se trata de abrir la puerta. Tu única meta es que el tema del dinero deje de ser raro entre ustedes.</p>
+
+        <h2 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:19px; color:#404040; margin:0 0 16px;">Por dónde empezar, según cómo sea tu hijo</h2>
+
+        <!-- Abridor A -->
+        <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px; margin-bottom:14px;">
+          <span style="display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:700; color:#565656; background:#f5f5f5; padding:5px 12px; border-radius:100px; margin-bottom:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Si es callado o le da pena el tema</span>
+          <p style="margin:0 0 12px; font-size:15px; color:#404040; line-height:1.6;">Aprovecha un momento sin presión, como en el carro o lavando los platos, y suéltalo sin mirarlo fijo:</p>
+          <div style="border-left:3px solid #00c73d; background:#f6fcf2; padding:14px 18px; border-radius:0 10px 10px 0; font-style:italic; color:#2c2c2c; font-size:15px; line-height:1.6; margin-bottom:12px;">“Oye, una pregunta boba… ¿tú en qué te gastarías mil lucas si te las dieran hoy?”</div>
+          <p style="margin:0; font-size:15px; color:#404040; line-height:1.6;">Lo que responda no importa todavía. Que se ría y conteste ya es ganancia.</p>
+        </div>
+
+        <!-- Abridor B -->
+        <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px; margin-bottom:14px;">
+          <span style="display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:700; color:#565656; background:#f5f5f5; padding:5px 12px; border-radius:100px; margin-bottom:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M8 9h8"/><path d="M8 13h6"/><path d="M18 4a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/></svg>Si ya pregunta o le interesa el dinero</span>
+          <p style="margin:0 0 12px; font-size:15px; color:#404040; line-height:1.6;">Este ya viene con curiosidad, así que devuélvele la pelota:</p>
+          <div style="border-left:3px solid #00c73d; background:#f6fcf2; padding:14px 18px; border-radius:0 10px 10px 0; font-style:italic; color:#2c2c2c; font-size:15px; line-height:1.6; margin-bottom:12px;">“Me has preguntado por la plata, así que cuéntame tú primero: ¿cómo crees que nos va a nosotros con el dinero en la casa?”</div>
+          <p style="margin:0; font-size:15px; color:#404040; line-height:1.6;">Escúchalo completo antes de corregir nada. Te vas a sorprender de lo que tiene en la cabeza.</p>
+        </div>
+
+        <!-- Abridor C -->
+        <div style="background:#fff; border:1px solid #e9e9e9; border-radius:16px; padding:22px 24px; margin-bottom:14px;">
+          <span style="display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:700; color:#565656; background:#f5f5f5; padding:5px 12px; border-radius:100px; margin-bottom:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M14.5 2v3a1 1 0 0 0 1 1h3"/><path d="M9 17v-5"/><path d="M12 17v-1"/><path d="M15 17v-3"/><path d="M5 8a2 2 0 0 1 2-2h6l5 5v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/></svg>Si parece que no le importa</span>
+          <p style="margin:0 0 12px; font-size:15px; color:#404040; line-height:1.6;">No arranques por la plata, arranca por lo que él quiere:</p>
+          <div style="border-left:3px solid #00c73d; background:#f6fcf2; padding:14px 18px; border-radius:0 10px 10px 0; font-style:italic; color:#2c2c2c; font-size:15px; line-height:1.6; margin-bottom:12px;">“¿Todavía estás ahorrando para tus audífonos? Porque se me ocurrió una forma de que llegues más rápido, si te interesa.”</div>
+          <p style="margin:0; font-size:15px; color:#404040; line-height:1.6;">Si dice que no, lo dejas ahí. Sembraste. Ya volverá.</p>
+        </div>
+
+        <!-- Si se complica -->
+        <div style="background:#fff8ee; border:1px solid #ffe2b0; border-radius:16px; padding:22px 24px; margin-bottom:28px;">
+          <div style="display:flex; align-items:center; gap:9px; margin-bottom:12px;"><span style="color:#c97a00;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span><span style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:#8a5a00;">¿Y si se complica?</span></div>
+          <p style="margin:0 0 12px; font-size:15px; color:#5c4a2a; line-height:1.6;">Si te contesta cortante, con un “¿para qué?” o un “qué pereza”, no insistas ni lo tomes personal. Cierra liviano:</p>
+          <div style="border-left:3px solid #ffae08; background:#fff3e0; padding:14px 18px; border-radius:0 10px 10px 0; font-style:italic; color:#5c4a2a; font-size:15px; line-height:1.6; margin-bottom:12px;">“Nada, era curiosidad. Cuando quieras hablamos.”</div>
+          <p style="margin:0; font-size:15px; color:#5c4a2a; line-height:1.6;">No fracasaste — abriste la puerta, y eso queda. La conversación de verdad casi nunca pasa el primer día.</p>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button onClick="{{ goRegistro }}" style="background:#00c73d; color:#fff; border:none; border-radius:100px; padding:14px 30px; font-family:'Open Sans',sans-serif; font-weight:700; font-size:16px; cursor:pointer;">Ya tuvimos la conversación</button>
+          <button onClick="{{ goEtapa }}" style="background:transparent; color:#007c26; border:1.5px solid #00c73d; border-radius:100px; padding:14px 26px; font-family:'Open Sans',sans-serif; font-weight:600; font-size:16px; cursor:pointer;">Volver a la etapa</button>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============================================================ -->
+      <!-- P07 · Registrar la micro-acción                              -->
+      <!-- ============================================================ -->
+      <sc-if value="{{ isRegistro }}">
+      <div data-screen-label="P07 · Registrar mi paso" style="max-width:620px; margin:0 auto; padding:40px 40px 64px;">
+        <div style="text-align:center; margin-bottom:30px;">
+          <span style="width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#00c73d,#8fe000); color:#fff; display:inline-flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px;"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <h1 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:28px; color:#232323; margin:0 0 8px;">¿Cómo te fue?</h1>
+          <p style="font-size:15px; color:#565656; line-height:1.55; margin:0 auto; max-width:46ch;">No hay respuesta buena ni mala. Solo queremos saber cómo se sintió, para acompañarte mejor.</p>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:22px;">
+          <div style="display:flex; align-items:center; gap:14px; background:#f6fcf2; border:1.5px solid #00c73d; border-radius:14px; padding:16px 18px;">
+            <span style="width:20px; height:20px; flex:none; border-radius:50%; border:6px solid #00c73d; background:#fff;"></span>
+            <div><div style="font-weight:700; font-size:15px; color:#232323;">Fluyó</div><div style="font-size:13px; color:#666;">Salió natural y se dio sin esfuerzo.</div></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px; background:#fff; border:1px solid #e9e9e9; border-radius:14px; padding:16px 18px;">
+            <span style="width:20px; height:20px; flex:none; border-radius:50%; border:1.5px solid #c5c5c5; background:#fff;"></span>
+            <div><div style="font-weight:700; font-size:15px; color:#404040;">Me costó</div><div style="font-size:13px; color:#666;">Lo hice, aunque no fue tan fácil.</div></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px; background:#fff; border:1px solid #e9e9e9; border-radius:14px; padding:16px 18px;">
+            <span style="width:20px; height:20px; flex:none; border-radius:50%; border:1.5px solid #c5c5c5; background:#fff;"></span>
+            <div><div style="font-weight:700; font-size:15px; color:#404040;">No se dio</div><div style="font-size:13px; color:#666;">Esta vez no pasó. Y está bien.</div></div>
+          </div>
+        </div>
+
+        <!-- confirmación (estado "Fluyó") -->
+        <div style="display:flex; gap:13px; align-items:flex-start; background:#f3fce3; border-radius:12px; padding:16px 18px; margin-bottom:14px;">
+          <span style="color:#00a531; flex:none; margin-top:1px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg></span>
+          <p style="margin:0; font-size:15px; color:#3a4a16; line-height:1.55;">Qué bueno. Diste un paso real con Mariana — de eso se trata todo esto.</p>
+        </div>
+
+        <p style="font-size:13px; color:#878787; line-height:1.55; text-align:center; margin:0 0 26px;">Sigues avanzando como educador. Tu siguiente paso te espera cuando tú quieras.</p>
+
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          <button onClick="{{ goMetodo }}" style="background:#00c73d; color:#fff; border:none; border-radius:100px; padding:14px 32px; font-family:'Open Sans',sans-serif; font-weight:700; font-size:16px; cursor:pointer;">Guardar</button>
+          <button onClick="{{ goMetodo }}" style="background:transparent; color:#666; border:1.5px solid #ddd; border-radius:100px; padding:14px 26px; font-family:'Open Sans',sans-serif; font-weight:600; font-size:16px; cursor:pointer;">Volver a mi tablero</button>
+        </div>
+      </div>
+      </sc-if>
+
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { screen: 'portal' };
+
+  mainRef = React.createRef();
+
+  go(s) {
+    this.setState({ screen: s }, () => {
+      try { if (this.mainRef && this.mainRef.current) this.mainRef.current.scrollTop = 0; } catch (e) {}
+    });
+  }
+
+  renderVals() {
+    const s = this.state.screen;
+    const method = s !== 'portal';
+
+    const navBase = "display:flex; align-items:center; gap:11px; width:100%; text-align:left; padding:10px 12px; border:none; border-radius:10px; cursor:pointer; font-family:'Open Sans',sans-serif; font-size:14px; background:transparent;";
+    const navActive = navBase + " background:#f6fcf2; color:#009a2f; font-weight:600;";
+    const navInactive = navBase + " background:transparent; color:#404040; font-weight:500;";
+
+    return {
+      isPortal: s === 'portal',
+      isIntro: s === 'intro',
+      isDiag: s === 'diag',
+      isPartida: s === 'partida',
+      isMetodo: s === 'metodo',
+      isEtapa: s === 'etapa',
+      isConversa: s === 'conversa',
+      isRegistro: s === 'registro',
+
+      mainRef: this.mainRef,
+
+      navInicio: s === 'portal' ? navActive : navInactive,
+      navIdle: navInactive,
+      navMetodo: method ? navActive : navInactive,
+
+      goPortal: () => this.go('portal'),
+      goIntro: () => this.go('intro'),
+      goDiag: () => this.go('diag'),
+      goPartida: () => this.go('partida'),
+      goPartidaLink: (e) => { if (e) e.preventDefault(); this.go('partida'); },
+      goMetodo: () => this.go('metodo'),
+      goEtapa: () => this.go('etapa'),
+      goConversa: () => this.go('conversa'),
+      goRegistro: () => this.go('registro'),
+      noop: (e) => { if (e) e.preventDefault(); },
+    };
+  }
+}
+</script>
+</body>
+</html>

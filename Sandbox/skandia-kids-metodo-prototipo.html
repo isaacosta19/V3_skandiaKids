@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  Skandia Kids — El Método (Fase 1, centrado en el padre) · PROTOTIPO
+  ============================================================================
+  Diseñadora: Rachel (ux-ui-designer) · 22 jun 2026
+  Basado en: skandia-kids-PRD-metodo.md (Fase 1) + skandia-kids-content.md
+             (bloque "Arquitectura de mensajes — El Método", provisional/Kiki)
+  Design System verificado desde ruta local SkCo.Fidu.DesignSystem.Lib.UX.
+
+  DECISIÓN DE CANAL — DESKTOP:
+  El PRD §7 es categórico: "el padre vive en el portal web Skandia". El
+  prototipo simula el SHELL del portal web Skandia existente (header + menú
+  lateral) con la sección del método embebida dentro, no como producto
+  independiente. No fue posible consultar Databricks en este entorno (sin CLI),
+  pero la decisión de desktop no depende del dato: el portal corporativo del
+  padre es web. La distribución de canal (TieneApp / TienePortalCorporate)
+  queda como verificación pendiente cuando el warehouse esté accesible.
+
+  ALCANCE (reglas duras del handoff):
+  - NINGUNA pantalla del adolescente. La billetera se diseña SOLO por la cara
+    del padre (P09: activar / fondear / ver progreso). Lo del hijo = Fase 2.
+  - Tono Skandia adulto: serio, confiable, cálido. Cero gamificación.
+  - La micro-acción de la semana es el elemento más prominente del home (P04).
+  - Elementos bloqueados (Etapa 5 "Hacer crecer", interfaz del hijo) solo como
+    texto "Próximamente con tu coach" / "Próximamente (Fase 2)".
+  - Microcopy provisional, pendiente de Kiki.
+
+  COMPONENTES sk-* del PRD usados como referencia de diseño (sk-card, sk-button,
+  sk-radio, sk-progressbar, sk-steps/sk-stepper, sk-chip, sk-tag, sk-badge,
+  sk-accordion, sk-toast, sk-tooltip, sk-menu). Se cargan los Web Components
+  reales desde el build local si está disponible; si no, fallback CSS fiel a
+  tokens. El prototipo prioriza fidelidad visual y navegabilidad.
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skandia Kids — El Método · Portal (Fase 1)</title>
+
+<!-- Web Components del Design System — carga desde build local (best-effort) -->
+<script>
+  (function () {
+    var s = document.createElement('script');
+    s.src = 'C:\\Users\\iacostal\\OneDrive - Skandia Colombia\\UX.20\\Github\\SkCo.Fidu.DesignSystem.Lib.UX\\dist\\elements\\main.js';
+    s.onload = function () {
+      try {
+        if (window.registerAllSkElements) window.registerAllSkElements();
+        else if (window.registerSkElements) window.registerSkElements(['sk-button']);
+      } catch (e) { /* fallback CSS toma el control */ }
+    };
+    s.onerror = function () { /* sin build local: fallback CSS */ };
+    document.head.appendChild(s);
+  })();
+</script>
+
+<style>
+/* ============================================================================
+   TOKENS — valores exactos leídos de primitive-color.css / semantic-color.css
+   y typescale-baseline.css del Design System local.
+   ============================================================================ */
+:root{
+  /* Primitivos relevantes */
+  --primary-00:#00c73d; --primary-d01:#03a835; --primary-d02:#009a2f; --primary-d03:#007c26;
+  --primary-l04:#caf9cb; --primary-l05:#f6fcf2;
+  --primarygrey-00:#404040; --primarygrey-l02:#565656; --primarygrey-l03:#666666; --primarygrey-l05:#a5a5a5;
+  --neutral-00:#ffffff; --neutral-l01:#fafafa; --neutral-l02:#f7f7f7; --neutral-l03:#e9e9e9;
+  --neutral-l04:#dddddd; --neutral-l05:#c5c5c5;
+  --feedback-success-light:#ecfdf3; --feedback-success-dark:#16d727;
+  --feedback-info-light:#ebf4ff; --feedback-info-dark:#0099de;
+  --feedback-warning-light:#fff3e0; --feedback-warning-dark:#ffae08;
+
+  /* Semánticos */
+  --background-principal:var(--neutral-00);
+  --background-grey-light:var(--neutral-l02);
+  --background-brand-light:var(--primary-l05);
+  --button-brand-default:var(--primary-00);
+  --button-brand-hover:var(--primary-d01);
+  --button-brand-secondary-hover:var(--primary-l04);
+  --button-brand-tertiary-hover:var(--primary-l05);
+  --texts-dark:var(--primarygrey-00);
+  --texts-medium:var(--primarygrey-l03);
+  --texts-light:var(--primarygrey-l05);
+  --texts-white:var(--neutral-00);
+  --texts-brand:var(--primary-00);
+  --icon-neutral:var(--primarygrey-00);
+  --icon-brand:var(--primary-00);
+  --stroke-brand:var(--primary-00);
+  --stroke-grey-light:var(--neutral-l04);
+
+  /* Espaciado base 8px */
+  --space-1:8px; --space-2:16px; --space-3:24px; --space-4:32px; --space-5:40px; --space-6:48px;
+  --radius-card:12px; --radius-pill:100px;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Open Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--background-grey-light);
+  color:var(--texts-dark);
+  font-size:16px; line-height:1.5;
+}
+
+/* Tipografía — escala del DS (typescale-baseline) */
+.t-h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:2rem;line-height:2.5rem;letter-spacing:0;}
+.t-h2{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.5rem;line-height:2rem;}
+.t-h3{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.25rem;line-height:1.75rem;}
+.t-h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.125rem;line-height:1.625rem;}
+.t-h5{font-family:'Montserrat',sans-serif;font-weight:600;font-size:1rem;line-height:1.5rem;}
+.t-body{font-size:1rem;font-weight:400;line-height:1.5rem;}
+.t-body-md{font-size:1rem;font-weight:500;line-height:1.5rem;}
+.t-label-bold{font-size:.875rem;font-weight:700;line-height:1.375rem;}
+.t-label{font-size:.875rem;font-weight:500;line-height:1.375rem;}
+.t-caption{font-size:.75rem;font-weight:500;line-height:1.25rem;color:var(--texts-medium);}
+.text-medium{color:var(--texts-medium);}
+.text-brand{color:var(--texts-brand);}
+
+/* ============================================================================
+   SHELL DEL PORTAL SKANDIA (header + menú lateral)
+   ============================================================================ */
+.portal{display:flex;min-height:100vh;flex-direction:column;}
+.portal-header{
+  height:64px;background:var(--background-principal);
+  border-bottom:1px solid var(--stroke-grey-light);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--space-4);position:sticky;top:0;z-index:50;
+}
+.portal-logo{display:flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.25rem;color:var(--texts-dark);}
+.portal-logo .dot{width:14px;height:14px;border-radius:50%;background:var(--primary-00);display:inline-block;}
+.portal-header-right{display:flex;align-items:center;gap:var(--space-3);color:var(--texts-medium);}
+.portal-header-right .icon-btn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--texts-medium);cursor:pointer;}
+.portal-header-right .icon-btn:hover{background:var(--neutral-l02);}
+.portal-avatar{width:38px;height:38px;border-radius:50%;background:var(--primary-l04);color:var(--primary-d03);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;}
+
+.portal-body{display:flex;flex:1;}
+.portal-sidebar{
+  width:248px;background:var(--background-principal);
+  border-right:1px solid var(--stroke-grey-light);
+  padding:var(--space-3) var(--space-2);flex-shrink:0;
+}
+.nav-section-label{font-size:.7rem;font-weight:700;text-transform:none;color:var(--texts-light);letter-spacing:.04em;padding:0 var(--space-2);margin:var(--space-3) 0 var(--space-1);}
+.nav-item{
+  display:flex;align-items:center;gap:12px;padding:11px var(--space-2);
+  border-radius:8px;color:var(--texts-medium);cursor:pointer;font-size:.9rem;font-weight:500;
+  margin-bottom:2px;border:none;background:none;width:100%;text-align:left;
+}
+.nav-item:hover{background:var(--neutral-l02);color:var(--texts-dark);}
+.nav-item.active{background:var(--primary-l05);color:var(--primary-d03);font-weight:700;}
+.nav-item .ni-icon{width:20px;text-align:center;font-size:1rem;}
+.nav-item.method-entry{position:relative;}
+.nav-item.method-entry.active{box-shadow:inset 3px 0 0 var(--primary-00);}
+
+.portal-main{flex:1;padding:var(--space-4) var(--space-5);background:var(--background-grey-light);overflow:auto;}
+.canvas{max-width:1080px;margin:0 auto;}
+.method-canvas{max-width:820px;margin:0 auto;}
+
+/* Breadcrumb dentro del método */
+.bc{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--texts-medium);margin-bottom:var(--space-3);}
+.bc a{color:var(--texts-medium);cursor:pointer;text-decoration:none;}
+.bc a:hover{color:var(--primary-d02);text-decoration:underline;}
+.bc .sep{color:var(--neutral-l05);}
+
+/* ============================================================================
+   CARDS (sk-card) — radius 12, padding 24
+   ============================================================================ */
+.card{background:var(--background-principal);border:1px solid var(--stroke-grey-light);border-radius:var(--radius-card);padding:var(--space-3);}
+.card + .card{margin-top:var(--space-3);}
+.card-brand{background:var(--background-brand-light);border-color:var(--primary-l04);}
+.card-grey{background:var(--background-grey-light);border-color:var(--neutral-l03);}
+
+/* ============================================================================
+   BOTONES (sk-button) — pill 100px, alturas fijas
+   ============================================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Open Sans',sans-serif;font-weight:700;font-size:.9375rem;
+  border-radius:var(--radius-pill);cursor:pointer;border:2px solid transparent;
+  padding:0 var(--space-3);height:48px;line-height:1;transition:background .15s,color .15s,border-color .15s;
+  text-decoration:none;
+}
+.btn:focus-visible{outline:2px solid var(--stroke-brand);outline-offset:2px;}
+.btn-primary{background:var(--button-brand-default);color:#fff;border-color:var(--button-brand-default);}
+.btn-primary:hover{background:var(--button-brand-hover);border-color:var(--button-brand-hover);}
+.btn-secondary{background:transparent;color:var(--primary-d02);border-color:var(--button-brand-default);}
+.btn-secondary:hover{background:var(--button-brand-secondary-hover);}
+.btn-tertiary{background:transparent;color:var(--primary-d02);border:none;padding:0 8px;text-decoration:underline;height:auto;}
+.btn-tertiary:hover{color:var(--primary-d03);}
+.btn-sm{height:38px;font-size:.875rem;padding:0 20px;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn-block{width:100%;}
+.btn-row{display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center;margin-top:var(--space-3);}
+
+/* sk-button real (Web Component) — asegurar ancho cuando esté definido */
+sk-button{display:inline-block;}
+
+/* ============================================================================
+   CHIP / TAG / BADGE
+   ============================================================================ */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:var(--radius-pill);font-size:.78rem;font-weight:600;background:var(--neutral-l02);color:var(--texts-medium);border:1px solid var(--neutral-l03);}
+.chip-brand{background:var(--primary-l05);color:var(--primary-d03);border-color:var(--primary-l04);}
+.chip-coach{background:var(--feedback-info-light);color:#0a6fa6;border:1px solid #bfe3f6;}
+.tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:700;background:var(--neutral-l02);color:var(--texts-medium);}
+.tag-stage{background:var(--primary-l05);color:var(--primary-d03);}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;font-size:.72rem;font-weight:700;background:var(--feedback-success-light);color:#0a8f1a;}
+
+/* ============================================================================
+   PROGRESS BAR (sk-progressbar)
+   ============================================================================ */
+.progress{height:8px;border-radius:8px;background:var(--neutral-l03);overflow:hidden;}
+.progress > span{display:block;height:100%;background:var(--primary-00);border-radius:8px;transition:width .3s;}
+
+/* ============================================================================
+   STEPS / RECORRIDO 7 ETAPAS (sk-steps / sk-stepper) — variante vertical
+   ============================================================================ */
+.steps{list-style:none;margin:0;padding:0;}
+.step{display:flex;gap:14px;position:relative;padding-bottom:var(--space-3);}
+.step:not(:last-child)::before{content:"";position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--neutral-l03);}
+.step.done:not(:last-child)::before{background:var(--primary-l04);}
+.step-marker{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;border:2px solid var(--neutral-l04);background:#fff;color:var(--texts-light);z-index:1;}
+.step.done .step-marker{background:var(--primary-00);border-color:var(--primary-00);color:#fff;}
+.step.current .step-marker{background:#fff;border-color:var(--primary-00);color:var(--primary-d02);box-shadow:0 0 0 4px var(--primary-l05);}
+.step.locked .step-marker{background:var(--neutral-l02);}
+.step-body{padding-top:4px;}
+.step-title{font-weight:700;font-size:.95rem;color:var(--texts-dark);}
+.step.locked .step-title{color:var(--texts-light);}
+.step-meta{font-size:.8rem;color:var(--texts-medium);margin-top:2px;}
+
+/* Recorrido horizontal compacto (P04 secundario) */
+.steps-h{display:flex;gap:0;flex-wrap:wrap;}
+.step-h{flex:1 1 90px;text-align:center;position:relative;padding-top:var(--space-2);}
+.step-h .dot{width:26px;height:26px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;background:#fff;border:2px solid var(--neutral-l04);color:var(--texts-light);position:relative;z-index:1;}
+.step-h.done .dot{background:var(--primary-00);border-color:var(--primary-00);color:#fff;}
+.step-h.current .dot{border-color:var(--primary-00);color:var(--primary-d02);box-shadow:0 0 0 3px var(--primary-l05);}
+.step-h:not(:last-child)::after{content:"";position:absolute;top:calc(var(--space-2) + 13px);left:50%;width:100%;height:2px;background:var(--neutral-l03);z-index:0;}
+.step-h.done:not(:last-child)::after{background:var(--primary-l04);}
+.step-h .lbl{font-size:.7rem;color:var(--texts-medium);line-height:1.15;display:block;}
+
+/* ============================================================================
+   RADIO (sk-radio) — opciones del diagnóstico / registro
+   ============================================================================ */
+.radio-group{display:flex;flex-direction:column;gap:10px;}
+.radio-opt{display:flex;align-items:flex-start;gap:12px;padding:14px var(--space-2);border:1px solid var(--stroke-grey-light);border-radius:10px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s;}
+.radio-opt:hover{border-color:var(--primary-l04);background:var(--primary-l05);}
+.radio-opt.selected{border-color:var(--primary-00);background:var(--primary-l05);box-shadow:inset 0 0 0 1px var(--primary-00);}
+.radio-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--neutral-l05);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;}
+.radio-opt.selected .radio-dot{border-color:var(--primary-00);}
+.radio-opt.selected .radio-dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--primary-00);}
+.radio-opt .ro-label{font-weight:600;font-size:.95rem;}
+.radio-opt .ro-desc{font-size:.82rem;color:var(--texts-medium);margin-top:2px;}
+
+/* ============================================================================
+   ACCORDION (sk-accordion)
+   ============================================================================ */
+.acc{border:1px solid var(--stroke-grey-light);border-radius:10px;overflow:hidden;}
+.acc + .acc{margin-top:10px;}
+.acc-head{display:flex;align-items:center;justify-content:space-between;padding:14px var(--space-2);cursor:pointer;background:#fff;font-weight:600;font-size:.95rem;}
+.acc-head:hover{background:var(--neutral-l01);}
+.acc-head .chev{transition:transform .2s;color:var(--texts-medium);}
+.acc.open .acc-head .chev{transform:rotate(180deg);}
+.acc-body{display:none;padding:0 var(--space-2) var(--space-2);font-size:.92rem;color:var(--texts-medium);line-height:1.55;}
+.acc.open .acc-body{display:block;}
+
+/* ============================================================================
+   TOAST (sk-toast)
+   ============================================================================ */
+.toast{position:fixed;top:80px;right:24px;background:#fff;border:1px solid var(--stroke-grey-light);border-left:4px solid var(--primary-00);border-radius:10px;padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.12);display:flex;gap:12px;align-items:flex-start;max-width:340px;z-index:200;opacity:0;transform:translateY(-8px);transition:opacity .25s,transform .25s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast .t-icon{color:var(--primary-00);font-size:1.1rem;margin-top:1px;}
+.toast .t-title{font-weight:700;font-size:.9rem;}
+.toast .t-msg{font-size:.82rem;color:var(--texts-medium);}
+
+/* ============================================================================
+   PIEZAS DEL MÉTODO
+   ============================================================================ */
+.method-hero{display:flex;gap:var(--space-2);align-items:flex-start;}
+.method-icon-lg{width:48px;height:48px;border-radius:12px;background:var(--primary-l05);color:var(--primary-d02);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+
+/* Bloque destacado micro-acción del home (P04) — el elemento MÁS prominente */
+.action-hero{background:linear-gradient(135deg,#ffffff 0%,var(--primary-l05) 100%);border:2px solid var(--primary-l04);border-radius:16px;padding:var(--space-4);position:relative;overflow:hidden;}
+.action-hero .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;color:var(--primary-d03);background:#fff;border:1px solid var(--primary-l04);padding:5px 12px;border-radius:var(--radius-pill);}
+.action-hero h2{margin:var(--space-2) 0 8px;}
+.action-hero .meta-time{display:inline-flex;align-items:center;gap:6px;color:var(--texts-medium);font-size:.85rem;font-weight:600;margin-top:4px;}
+
+/* Anatomía de etapa (P05) */
+.anatomy-block{padding:var(--space-2) 0;border-top:1px solid var(--neutral-l03);}
+.anatomy-block:first-child{border-top:none;padding-top:0;}
+.anatomy-label{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;color:var(--primary-d02);text-transform:none;letter-spacing:.02em;margin-bottom:6px;}
+.anatomy-label .al-icon{font-size:.9rem;}
+.anatomy-text{font-size:.96rem;line-height:1.55;color:var(--texts-dark);}
+
+/* Guion P06 */
+.opener{border:1px solid var(--stroke-grey-light);border-radius:12px;padding:var(--space-2);background:#fff;}
+.opener + .opener{margin-top:var(--space-2);}
+.opener .quote{font-style:italic;color:var(--primary-d03);background:var(--primary-l05);border-radius:8px;padding:10px 14px;margin:8px 0;display:block;line-height:1.5;}
+
+/* divider */
+.divider{height:1px;background:var(--neutral-l03);border:none;margin:var(--space-3) 0;}
+
+/* Home portal — tarjeta de acceso al método (P01) */
+.home-grid{display:grid;grid-template-columns:2fr 1fr;gap:var(--space-3);align-items:start;}
+.portal-widget{background:#fff;border:1px solid var(--stroke-grey-light);border-radius:var(--radius-card);padding:var(--space-3);}
+.balance-num{font-family:'IBM Plex Mono','Courier New',monospace;font-weight:700;font-size:1.6rem;color:var(--texts-dark);}
+.method-access-card{background:linear-gradient(135deg,#ffffff 0%,var(--primary-l05) 100%);border:2px solid var(--primary-l04);border-radius:16px;padding:var(--space-3);}
+.method-access-card .badge-new{display:inline-block;background:var(--primary-00);color:#fff;font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:var(--radius-pill);margin-bottom:10px;}
+
+.muted-note{font-size:.8rem;color:var(--texts-medium);}
+.helper-under-cta{font-size:.8rem;color:var(--texts-medium);margin-top:10px;}
+
+/* Banner Fase 2 / bloqueos */
+.notice{display:flex;gap:12px;align-items:flex-start;border-radius:10px;padding:14px var(--space-2);font-size:.88rem;line-height:1.5;}
+.notice-info{background:var(--feedback-info-light);border:1px solid #bfe3f6;color:#0a5a82;}
+.notice-warn{background:var(--feedback-warning-light);border:1px solid #ffe2b0;color:#8a5a00;}
+.notice .n-icon{font-size:1.05rem;margin-top:1px;flex-shrink:0;}
+
+/* utilidades */
+.mt-1{margin-top:var(--space-1);}.mt-2{margin-top:var(--space-2);}.mt-3{margin-top:var(--space-3);}.mt-4{margin-top:var(--space-4);}
+.mb-1{margin-bottom:var(--space-1);}.mb-2{margin-bottom:var(--space-2);}.mb-3{margin-bottom:var(--space-3);}
+.row{display:flex;gap:var(--space-2);align-items:center;}
+.row-between{display:flex;gap:var(--space-2);align-items:center;justify-content:space-between;}
+.wrap{flex-wrap:wrap;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);}
+
+/* navegación de pantallas */
+.screen{display:none;}
+.screen.active{display:block;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* prototipo helper bar */
+.proto-tag{position:fixed;bottom:14px;left:14px;background:var(--primarygrey-00);color:#fff;font-size:.7rem;padding:6px 12px;border-radius:var(--radius-pill);opacity:.8;z-index:300;}
+
+@media (max-width:900px){
+  .home-grid{grid-template-columns:1fr;}
+  .portal-sidebar{display:none;}
+  .portal-main{padding:var(--space-3);}
+}
+</style>
+</head>
+<body>
+
+<!-- ===========================================================================
+     SHELL DEL PORTAL SKANDIA
+     =========================================================================== -->
+<div class="portal">
+
+  <!-- HEADER del portal -->
+  <header class="portal-header">
+    <div class="portal-logo"><span class="dot"></span> Skandia</div>
+    <div class="portal-header-right">
+      <span class="t-label" style="color:var(--texts-medium)">Portal de clientes</span>
+      <div class="icon-btn" title="Notificaciones">🔔</div>
+      <div class="portal-avatar">CR</div>
+    </div>
+  </header>
+
+  <div class="portal-body">
+
+    <!-- MENÚ LATERAL del portal — incluye el ÍTEM PERMANENTE del método (P01, acceso 2) -->
+    <nav class="portal-sidebar" aria-label="Menú del portal">
+      <div class="nav-section-label">Mi portafolio</div>
+      <button class="nav-item" data-go="portal-home"><span class="ni-icon">🏠</span> Inicio</button>
+      <button class="nav-item"><span class="ni-icon">💼</span> Mis productos</button>
+      <button class="nav-item"><span class="ni-icon">📊</span> Movimientos</button>
+      <button class="nav-item"><span class="ni-icon">🎯</span> Mis metas</button>
+
+      <div class="nav-section-label">Acompañamiento</div>
+      <!-- ÍTEM DE MENÚ LATERAL — label corto del content: "Enséñale sobre su plata" -->
+      <button class="nav-item method-entry" id="navMethod" data-go="p04-home">
+        <span class="ni-icon">🌱</span> Enséñale sobre su plata
+      </button>
+      <button class="nav-item"><span class="ni-icon">🎓</span> Skandia Channel</button>
+
+      <div class="nav-section-label">Cuenta</div>
+      <button class="nav-item"><span class="ni-icon">⚙️</span> Configuración</button>
+      <button class="nav-item"><span class="ni-icon">↩️</span> Salir</button>
+    </nav>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="portal-main">
+
+      <!-- =====================================================================
+           P01 · HOME DEL PORTAL — con la TARJETA de acceso al método (acceso 1)
+           ===================================================================== -->
+      <section class="screen active" id="portal-home">
+        <div class="canvas">
+          <h1 class="t-h1 mb-1">Hola, Carolina</h1>
+          <p class="t-body text-medium mb-3">Este es tu resumen de hoy.</p>
+
+          <div class="home-grid">
+            <div>
+              <!-- Widget de portafolio (contexto del portal real) -->
+              <div class="portal-widget mb-3">
+                <div class="row-between">
+                  <span class="t-h5">Mi portafolio</span>
+                  <span class="chip chip-brand">Al día</span>
+                </div>
+                <div class="balance-num mt-2">$ 84.320.500</div>
+                <p class="t-caption">Saldo consolidado · actualizado hoy</p>
+                <div class="grid-2 mt-3">
+                  <div class="card-grey card" style="padding:14px">
+                    <p class="t-caption mb-1">Pensión voluntaria</p>
+                    <span class="t-h5">$ 61.200.000</span>
+                  </div>
+                  <div class="card-grey card" style="padding:14px">
+                    <p class="t-caption mb-1">Fondo de inversión</p>
+                    <span class="t-h5">$ 23.120.500</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TARJETA DE ACCESO AL MÉTODO (P01 · acceso 1, sk-card) -->
+              <!-- Microcopy provisional del content.md P01 -->
+              <div class="method-access-card">
+                <span class="badge-new">Nuevo</span>
+                <div class="method-hero">
+                  <div class="method-icon-lg">🌱</div>
+                  <div>
+                    <h2 class="t-h3 mb-1">Enséñale a tu hijo a manejar su plata</h2>
+                    <p class="t-body" style="color:var(--primarygrey-l02)">No necesitas tener todo resuelto. Te acompañamos a hacerlo, un paso a la vez.</p>
+                    <p class="muted-note mt-2">Un método de Skandia para acompañarte como papá o mamá. Empieza en 3 minutos.</p>
+                  </div>
+                </div>
+                <div class="btn-row">
+                  <button class="btn btn-primary" data-go="p02-diag">Empezar</button>
+                  <button class="btn btn-tertiary" data-go="p01-detail">Ver cómo funciona</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- columna lateral del portal -->
+            <aside>
+              <div class="portal-widget mb-3">
+                <span class="t-h5">Pendientes</span>
+                <p class="t-caption mt-1">No tienes pendientes esta semana. Todo tranquilo.</p>
+              </div>
+              <div class="portal-widget">
+                <span class="t-h5">Tu asesor</span>
+                <div class="row mt-2">
+                  <div class="portal-avatar" style="background:var(--neutral-l03);color:var(--texts-medium)">JM</div>
+                  <div><div class="t-label-bold">Julián M.</div><div class="t-caption">Asesor patrimonial</div></div>
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          <p class="muted-note mt-4" style="text-align:center">
+            Hay dos formas de entrar al método: esta tarjeta del inicio y el ítem
+            <strong>“Enséñale sobre su plata”</strong> del menú lateral (siempre disponible).
+          </p>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           P01b · "Ver cómo funciona" (vista previa antes de entrar)
+           ===================================================================== -->
+      <section class="screen" id="p01-detail">
+        <div class="method-canvas">
+          <div class="bc"><a data-go="portal-home">Inicio</a><span class="sep">›</span><span>Cómo funciona el método</span></div>
+          <div class="card">
+            <div class="method-hero mb-3">
+              <div class="method-icon-lg">🌱</div>
+              <div>
+                <h1 class="t-h2 mb-1">Un método, no un curso</h1>
+                <p class="t-body text-medium">El método avanza con tus conversaciones, no con horas de video. Cada semana te proponemos un paso pequeño para acompañar a tu hijo con el dinero.</p>
+              </div>
+            </div>
+            <div class="grid-2" style="gap:var(--space-3)">
+              <div><div class="anatomy-label"><span class="al-icon">①</span> Empiezas por ti</div><p class="anatomy-text text-medium">Cuatro preguntas rápidas para ubicar tu punto de partida.</p></div>
+              <div><div class="anatomy-label"><span class="al-icon">②</span> Recorres 7 etapas</div><p class="anatomy-text text-medium">A tu ritmo, sin afán. Avanzas con un paso a la vez.</p></div>
+              <div><div class="anatomy-label"><span class="al-icon">③</span> Conversas, no enseñas</div><p class="anatomy-text text-medium">Te damos las palabras para hablar de plata sin que sea un sermón.</p></div>
+              <div><div class="anatomy-label"><span class="al-icon">④</span> Tu hijo se gradúa</div><p class="anatomy-text text-medium">El objetivo es que a los 18 maneje su plata solo.</p></div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-primary" data-go="p02-diag">Empezar</button>
+              <button class="btn btn-tertiary" data-go="portal-home">Volver al inicio</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           P02 · DIAGNÓSTICO / ETAPA 0 (máx 4 preguntas) — sk-radio + sk-progressbar
+           ===================================================================== -->
+      <section class="screen" id="p02-diag">
+        <div class="method-canvas">
+          <div class="bc"><a data-go="portal-home">Inicio</a><span class="sep">›</span><span>El método</span><span class="sep">›</span><span>Tu punto de partida</span></div>
+
+          <div class="card">
+            <div class="row-between mb-2">
+              <span class="chip chip-brand">Etapa 0 · Empecemos por ti</span>
+              <span class="t-caption" id="diagStepLabel">Pregunta 1 de 4</span>
+            </div>
+            <div class="progress mb-3"><span id="diagBar" style="width:25%"></span></div>
+
+            <h1 class="t-h2 mb-1">Empecemos por ti</h1>
+            <p class="t-body text-medium mb-3">Cuatro preguntas rápidas. No hay respuestas buenas ni malas — solo queremos acompañarte bien.</p>
+
+            <!-- Pregunta 1 -->
+            <div class="diag-q" data-q="1">
+              <p class="t-h5 mb-2">¿Qué edad tiene tu hijo o hija?</p>
+              <div class="radio-group">
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">8 a 11 años</span></label>
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">12 a 14 años</span></label>
+                <label class="radio-opt selected"><span class="radio-dot"></span><span class="ro-label">15 a 17 años</span></label>
+              </div>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="diag-q" data-q="2" style="display:none">
+              <p class="t-h5 mb-2">Hoy, ¿de dónde sale la plata que maneja?</p>
+              <div class="radio-group">
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Mesada</span></label>
+                <label class="radio-opt selected"><span class="radio-dot"></span><span class="ro-label">Le damos cuando pide</span></label>
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Regalos</span></label>
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Ya tiene ingresos propios</span></label>
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Todavía no maneja plata</span></label>
+              </div>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div class="diag-q" data-q="3" style="display:none">
+              <p class="t-h5 mb-2">¿Hablan de dinero en casa?</p>
+              <div class="radio-group">
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Sí, con confianza</span></label>
+                <label class="radio-opt selected"><span class="radio-dot"></span><span class="ro-label">A veces</span></label>
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Casi nunca</span></label>
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Es un tema incómodo</span></label>
+              </div>
+            </div>
+
+            <!-- Pregunta 4 -->
+            <div class="diag-q" data-q="4" style="display:none">
+              <p class="t-h5 mb-2">¿Qué es lo que más te inquieta de su futuro con el dinero?</p>
+              <div class="radio-group">
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Que no sepa ahorrar</span></label>
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Que gaste sin medir</span></label>
+                <label class="radio-opt selected"><span class="radio-dot"></span><span class="ro-label">Que no esté listo para la universidad</span></label>
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Que repita mis errores</span></label>
+                <label class="radio-opt"><span class="radio-dot"></span><span class="ro-label">Otra</span></label>
+              </div>
+              <!-- Microcopy de autoconciencia (Etapa 0) -->
+              <div class="notice notice-info mt-3">
+                <span class="n-icon">💡</span>
+                <span>Antes de empezar, algo que vale la pena tener en mente: lo que tu hijo aprende del dinero empieza por lo que tú le transmites sin darte cuenta. Por eso empezamos por ti.</span>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-tertiary" id="diagBack" data-go="portal-home">Salir</button>
+              <button class="btn btn-primary" id="diagNext">Siguiente</button>
+            </div>
+            <p class="helper-under-cta">Puedes cambiar estas respuestas cuando quieras.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           P03 · TU PUNTO DE PARTIDA — resultado + recorrido 7 etapas (sk-steps)
+           ===================================================================== -->
+      <section class="screen" id="p03-result">
+        <div class="method-canvas">
+          <div class="bc"><a data-go="portal-home">Inicio</a><span class="sep">›</span><span>El método</span><span class="sep">›</span><span>Tu punto de partida</span></div>
+
+          <div class="card card-brand mb-3">
+            <span class="chip chip-brand mb-2">Tu punto de partida</span>
+            <h1 class="t-h2 mb-2">Este es tu punto de partida</h1>
+            <!-- Lectura personalizada (texto dinámico según respuestas; aquí ejemplo del content) -->
+            <p class="t-body" style="color:var(--primarygrey-l02)">Tienes una hija de 16 que maneja algo de plata cuando la pide, pero el tema del dinero todavía no fluye en casa. Es un muy buen momento para empezar — todavía estás a tiempo de acompañarla.</p>
+            <div class="notice notice-info mt-3">
+              <span class="n-icon">🤝</span>
+              <span>Si sientes que no sabes bien por dónde empezar, es normal. A la mayoría de nosotros nadie nos enseñó esto. Por eso vamos paso a paso.</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="t-h4 mb-1">Tu recorrido tiene 7 etapas</h2>
+            <p class="t-body text-medium mb-3">Avanzas a tu ritmo — sin afán.</p>
+
+            <!-- sk-steps vertical, las 7 etapas (0–6) -->
+            <ul class="steps">
+              <li class="step current">
+                <span class="step-marker">0</span>
+                <div class="step-body"><div class="step-title">Tu punto de partida</div><div class="step-meta">Estás aquí</div></div>
+              </li>
+              <li class="step">
+                <span class="step-marker">1</span>
+                <div class="step-body"><div class="step-title">La primera conversación</div><div class="step-meta">Tu siguiente paso</div></div>
+              </li>
+              <li class="step">
+                <span class="step-marker">2</span>
+                <div class="step-body"><div class="step-title">Plata propia</div><div class="step-meta">Aquí activas su billetera</div></div>
+              </li>
+              <li class="step">
+                <span class="step-marker">3</span>
+                <div class="step-body"><div class="step-title">Decidir y equivocarse</div></div>
+              </li>
+              <li class="step">
+                <span class="step-marker">4</span>
+                <div class="step-body"><div class="step-title">Metas</div></div>
+              </li>
+              <li class="step locked">
+                <span class="step-marker">5</span>
+                <div class="step-body"><div class="step-title">Hacer crecer</div><div class="step-meta"><span class="chip chip-coach">Próximamente con tu coach</span></div></div>
+              </li>
+              <li class="step">
+                <span class="step-marker">6</span>
+                <div class="step-body"><div class="step-title">Rumbo a los 18</div></div>
+              </li>
+            </ul>
+
+            <div class="btn-row">
+              <button class="btn btn-primary" data-go="p05-stage">Empezar la primera conversación</button>
+              <button class="btn btn-secondary btn-sm" data-go="p04-home">Ir a mi tablero</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           P04 · HOME DEL MÉTODO / TABLERO DEL EDUCADOR
+           La MICRO-ACCIÓN DE LA SEMANA es lo más prominente.
+           ===================================================================== -->
+      <section class="screen" id="p04-home">
+        <div class="method-canvas">
+          <div class="bc"><a data-go="portal-home">Inicio</a><span class="sep">›</span><span>El método</span></div>
+
+          <h1 class="t-h2 mb-1">Hola, Carolina</h1>
+          <p class="t-body text-medium mb-3">Etapa 1 · La primera conversación</p>
+
+          <!-- BLOQUE DESTACADO — micro-acción de la semana (lo más prominente) -->
+          <div class="action-hero mb-3">
+            <span class="eyebrow">⭐ Tu paso de esta semana</span>
+            <h2 class="t-h2">Pregúntale a Mariana en qué se le va la plata</h2>
+            <p class="t-body" style="color:var(--primarygrey-l02)">No tienes que explicarle nada todavía. Solo escuchar.</p>
+            <span class="meta-time">🕐 Te toma 5 minutos en cualquier momento del día</span>
+            <div class="btn-row">
+              <button class="btn btn-primary" data-go="p06-guion">Ver cómo hacerlo</button>
+              <button class="btn btn-secondary" data-go="p07-registro">Ya lo hice</button>
+            </div>
+          </div>
+
+          <!-- Recorrido (secundario, debajo de la acción) -->
+          <div class="card mb-3">
+            <span class="t-h5 mb-2" style="display:block">Tu recorrido</span>
+            <div class="steps-h">
+              <div class="step-h done"><span class="dot">✓</span><span class="lbl">Punto de partida</span></div>
+              <div class="step-h current"><span class="dot">1</span><span class="lbl">La primera conversación</span></div>
+              <div class="step-h"><span class="dot">2</span><span class="lbl">Plata propia</span></div>
+              <div class="step-h"><span class="dot">3</span><span class="lbl">Decidir y equivocarse</span></div>
+              <div class="step-h"><span class="dot">4</span><span class="lbl">Metas</span></div>
+              <div class="step-h"><span class="dot">5</span><span class="lbl">Hacer crecer</span></div>
+              <div class="step-h"><span class="dot">6</span><span class="lbl">Rumbo a los 18</span></div>
+            </div>
+            <div class="row wrap mt-3" style="gap:10px">
+              <span class="chip chip-brand">Etapa 1 · En curso</span>
+              <span class="chip">Etapa 2 · Te falta poco para llegar</span>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-secondary btn-sm" data-go="p05-stage">Ver mi etapa actual</button>
+            </div>
+          </div>
+
+          <div class="grid-2" style="gap:var(--space-3)">
+            <!-- Progreso del educador (secundario) -->
+            <div class="card">
+              <span class="t-h5 mb-1" style="display:block">Cómo vas como educador</span>
+              <p class="t-body text-medium">Llevas <strong style="color:var(--texts-dark)">3 conversaciones</strong> con Mariana y <strong style="color:var(--texts-dark)">2 pasos</strong> completados. Vas muy bien.</p>
+              <div class="row wrap mt-2" style="gap:8px">
+                <span class="badge">✓ Etapa 0 hecha</span>
+                <span class="badge">✓ Primera charla</span>
+              </div>
+              <p class="t-caption mt-2">No hay afán. Cada conversación cuenta, así sea corta.</p>
+            </div>
+
+            <!-- Acceso a recursos (segundo plano) -->
+            <div class="card">
+              <span class="t-h5 mb-1" style="display:block">¿Quieres profundizar?</span>
+              <p class="t-body text-medium">Recursos cortos del Skandia Channel, enganchados a tu etapa. Opcional.</p>
+              <div class="btn-row">
+                <button class="btn btn-tertiary" data-go="p08-recursos">Ver recursos</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           P05 · DETALLE DE ETAPA — PLANTILLA ×7 (instancia: Etapa 1)
+           Anatomía fija: objetivo · concepto · señales · conversación · paso · rol
+           ===================================================================== -->
+      <section class="screen" id="p05-stage">
+        <div class="method-canvas">
+          <div class="bc"><a data-go="portal-home">Inicio</a><span class="sep">›</span><a data-go="p04-home">El método</a><span class="sep">›</span><span>Etapa 1</span></div>
+
+          <div class="card">
+            <div class="row wrap mb-2" style="gap:10px">
+              <span class="tag tag-stage">Etapa 1</span>
+              <span class="chip chip-brand">En curso</span>
+            </div>
+            <h1 class="t-h2 mb-3">La primera conversación</h1>
+
+            <!-- Hacia dónde vamos -->
+            <div class="anatomy-block">
+              <div class="anatomy-label"><span class="al-icon">🎯</span> Hacia dónde vamos</div>
+              <p class="anatomy-text">Abrir el tema del dinero con tu hijo sin que se sienta un sermón. Que sea una charla, no una clase.</p>
+            </div>
+
+            <!-- La idea que vas a sembrar -->
+            <div class="anatomy-block">
+              <div class="anatomy-label"><span class="al-icon">🌱</span> La idea que vas a sembrar</div>
+              <p class="anatomy-text">Que hablar de dinero es normal y se puede hacer con confianza. En muchas casas es un tema tabú; aquí lo abrimos con naturalidad.</p>
+            </div>
+
+            <!-- Señales (en accordion para no interrumpir el flujo) -->
+            <div class="anatomy-block">
+              <div class="anatomy-label"><span class="al-icon">👀</span> Cómo saber si tu hijo está listo</div>
+              <div class="acc open" data-acc>
+                <div class="acc-head">Ver las señales <span class="chev">⌄</span></div>
+                <div class="acc-body">
+                  Siempre lo está. No necesita saber nada para conversar. El que se prepara aquí eres tú, no él.
+                </div>
+              </div>
+            </div>
+
+            <!-- La conversación clave -->
+            <div class="anatomy-block">
+              <div class="anatomy-label"><span class="al-icon">💬</span> La conversación clave</div>
+              <p class="anatomy-text">Una charla corta para romper el hielo con el tema del dinero. Te damos por dónde empezar según cómo sea tu hijo.</p>
+            </div>
+
+            <!-- La micro-acción de la semana -->
+            <div class="anatomy-block">
+              <div class="anatomy-label"><span class="al-icon">⭐</span> Tu paso de esta semana</div>
+              <div class="card card-brand" style="padding:16px">
+                <p class="anatomy-text" style="font-weight:600">Saca el tema una vez, sin agenda. Pregúntale algo sencillo sobre su plata y solo escucha.</p>
+              </div>
+            </div>
+
+            <!-- Rol de Skandia -->
+            <div class="anatomy-block">
+              <div class="anatomy-label"><span class="al-icon">🤝</span> En qué te acompañamos</div>
+              <p class="anatomy-text">Te damos las primeras frases para arrancar y qué hacer si la charla se pone incómoda. No estás solo en esto.</p>
+            </div>
+
+            <!-- Profundidad opcional -->
+            <div class="anatomy-block">
+              <div class="acc" data-acc>
+                <div class="acc-head">📚 Profundizar (opcional) — Skandia Channel <span class="chev">⌄</span></div>
+                <div class="acc-body">
+                  “Cómo hablar de dinero sin que sea un sermón” · 4 min · Etapa 1.
+                  <div class="btn-row" style="margin-top:10px"><button class="btn btn-tertiary" data-go="p08-recursos">Ver en recursos</button></div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="divider">
+            <div class="btn-row">
+              <button class="btn btn-primary" data-go="p06-guion">Ver la conversación</button>
+              <button class="btn btn-secondary" data-go="p07-registro">Registrar mi paso</button>
+            </div>
+          </div>
+
+          <!-- Nota de plantilla: la Etapa 2 abre la billetera (cara del padre, P09) -->
+          <div class="notice notice-info mt-3">
+            <span class="n-icon">ℹ️</span>
+            <span>Esta es una <strong>plantilla que se repite en las 7 etapas</strong> — cambia el contenido, no la estructura. En la <strong>Etapa 2 (“Plata propia”)</strong> aparece además el paso para activar la billetera de tu hijo.
+            <button class="btn btn-tertiary" data-go="p09-billetera">Ver cómo se ve la Etapa 2 (billetera)</button></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           P06 · LA CONVERSACIÓN / GUION (Etapa 1) — sk-card + sk-chip + sk-accordion
+           ===================================================================== -->
+      <section class="screen" id="p06-guion">
+        <div class="method-canvas">
+          <div class="bc"><a data-go="p04-home">El método</a><span class="sep">›</span><a data-go="p05-stage">Etapa 1</a><span class="sep">›</span><span>La conversación</span></div>
+
+          <div class="card">
+            <span class="tag tag-stage mb-2">Etapa 1 · La conversación clave</span>
+            <h1 class="t-h2 mb-2">Por dónde empezar, según cómo sea tu hijo</h1>
+            <div class="notice notice-info mb-3">
+              <span class="n-icon">💬</span>
+              <span>No tienes que decir esto al pie de la letra. Son puntos de partida — di lo tuyo, a tu manera. Esta primera vez no se trata de explicar nada: se trata de abrir la puerta.</span>
+            </div>
+
+            <!-- Abridor A -->
+            <div class="opener">
+              <span class="chip">Si es callado o le da pena el tema</span>
+              <p class="anatomy-text mt-2">Aprovecha un momento sin presión, como en el carro o lavando los platos, y suéltalo sin mirarlo fijo:</p>
+              <span class="quote">“Oye, una pregunta boba… ¿tú en qué te gastarías mil lucas si te las dieran hoy?”</span>
+              <p class="anatomy-text text-medium">Lo que responda no importa todavía. Que se ría y conteste ya es ganancia.</p>
+            </div>
+
+            <!-- Abridor B -->
+            <div class="opener">
+              <span class="chip">Si ya pregunta o le interesa el dinero</span>
+              <p class="anatomy-text mt-2">Este ya viene con curiosidad, así que devuélvele la pelota:</p>
+              <span class="quote">“Me has preguntado por la plata, así que cuéntame tú primero: ¿cómo crees que nos va a nosotros con el dinero en la casa?”</span>
+              <p class="anatomy-text text-medium">Escúchalo completo antes de corregir nada. Te vas a sorprender de lo que tiene en la cabeza.</p>
+            </div>
+
+            <!-- Abridor C -->
+            <div class="opener">
+              <span class="chip">Si parece que no le importa</span>
+              <p class="anatomy-text mt-2">No arranques por la plata, arranca por lo que él quiere:</p>
+              <span class="quote">“¿Todavía estás ahorrando para eso que quieres? Porque se me ocurrió una forma de que llegues más rápido, si te interesa.”</span>
+              <p class="anatomy-text text-medium">Si dice que no, lo dejas ahí. Sembraste. Ya volverá.</p>
+            </div>
+
+            <!-- Si se complica -->
+            <div class="acc mt-3" data-acc>
+              <div class="acc-head">¿Y si se complica? <span class="chev">⌄</span></div>
+              <div class="acc-body">
+                Si te contesta cortante, con un “¿para qué?” o un “qué pereza”, no insistas ni lo tomes personal. Cierra liviano: <em>“Nada, era curiosidad. Cuando quieras hablamos.”</em> No fracasaste — abriste la puerta, y eso queda. La conversación de verdad casi nunca pasa el primer día.
+              </div>
+            </div>
+
+            <hr class="divider">
+            <div class="btn-row">
+              <button class="btn btn-primary" data-go="p07-registro">Ya tuvimos la conversación</button>
+              <button class="btn btn-tertiary" data-go="p05-stage">Volver a la etapa</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           P07 · REGISTRAR LA MICRO-ACCIÓN — sk-radio + sk-toast + sk-badge
+           ===================================================================== -->
+      <section class="screen" id="p07-registro">
+        <div class="method-canvas">
+          <div class="bc"><a data-go="p04-home">El método</a><span class="sep">›</span><span>Registrar mi paso</span></div>
+
+          <div class="card" id="registroForm">
+            <h1 class="t-h2 mb-1">¿Cómo te fue?</h1>
+            <p class="t-body text-medium mb-3">No hay respuesta buena ni mala. Solo queremos saber cómo se sintió, para acompañarte mejor.</p>
+
+            <div class="radio-group" id="registroOpts">
+              <label class="radio-opt" data-result="fluyó">
+                <span class="radio-dot"></span>
+                <span><span class="ro-label">Fluyó</span><span class="ro-desc">Salió natural y se dio sin esfuerzo.</span></span>
+              </label>
+              <label class="radio-opt" data-result="costó">
+                <span class="radio-dot"></span>
+                <span><span class="ro-label">Me costó</span><span class="ro-desc">Lo hice, aunque no fue tan fácil.</span></span>
+              </label>
+              <label class="radio-opt" data-result="nose">
+                <span class="radio-dot"></span>
+                <span><span class="ro-label">No se dio</span><span class="ro-desc">Esta vez no pasó. Y está bien.</span></span>
+              </label>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-primary" id="registroSave" disabled>Guardar</button>
+              <button class="btn btn-tertiary" data-go="p04-home">Volver a mi tablero</button>
+            </div>
+          </div>
+
+          <!-- Confirmación (se muestra tras guardar) -->
+          <div class="card card-brand" id="registroDone" style="display:none">
+            <div class="method-hero">
+              <div class="method-icon-lg">✓</div>
+              <div>
+                <h1 class="t-h2 mb-1" id="doneTitle">Qué bueno.</h1>
+                <p class="t-body" style="color:var(--primarygrey-l02)" id="doneMsg"></p>
+              </div>
+            </div>
+            <div class="row wrap mt-3" style="gap:8px">
+              <span class="badge">✓ Paso registrado</span>
+              <span class="badge">+1 conversación con Mariana</span>
+            </div>
+            <p class="t-caption mt-2">Sigues avanzando como educador. Tu siguiente paso te espera cuando tú quieras.</p>
+            <div class="btn-row">
+              <button class="btn btn-primary" data-go="p04-home">Volver a mi tablero</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           P08 · CENTRO DE RECURSOS — sk-card + sk-accordion + sk-tag + sk-chip
+           Opcional; contenido en segundo plano.
+           ===================================================================== -->
+      <section class="screen" id="p08-recursos">
+        <div class="method-canvas">
+          <div class="bc"><a data-go="p04-home">El método</a><span class="sep">›</span><span>Recursos</span></div>
+
+          <div class="card mb-3">
+            <h1 class="t-h2 mb-1">Recursos para cuando quieras profundizar</h1>
+            <p class="t-body text-medium">Nada de esto es obligatorio. El método avanza con tus conversaciones, no con horas de video. Pero si quieres profundizar en algo, aquí está.</p>
+            <span class="chip mt-2">Por tema, enganchado a tu etapa</span>
+          </div>
+
+          <div class="card">
+            <!-- Recurso 1 — recomendado para etapa actual -->
+            <div class="row-between" style="padding:14px 0;border-bottom:1px solid var(--neutral-l03)">
+              <div>
+                <div class="t-label-bold">Cómo hablar de dinero sin que sea un sermón</div>
+                <div class="row wrap mt-1" style="gap:8px">
+                  <span class="t-caption">▶ 4 min</span><span class="tag tag-stage">Etapa 1</span>
+                  <span class="chip chip-brand">Recomendado para tu etapa</span>
+                </div>
+                <p class="t-caption mt-1">Te puede servir para tu paso de esta semana.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm">Ver</button>
+            </div>
+            <!-- Recurso 2 -->
+            <div class="row-between" style="padding:14px 0;border-bottom:1px solid var(--neutral-l03)">
+              <div>
+                <div class="t-label-bold">¿Mesada sí o mesada no?</div>
+                <div class="row wrap mt-1" style="gap:8px"><span class="t-caption">▶ 5 min</span><span class="tag tag-stage">Etapa 2</span></div>
+              </div>
+              <button class="btn btn-secondary btn-sm">Ver</button>
+            </div>
+            <!-- Recurso 3 -->
+            <div class="row-between" style="padding:14px 0;border-bottom:1px solid var(--neutral-l03)">
+              <div>
+                <div class="t-label-bold">Dejar que se equivoque sin angustiarte</div>
+                <div class="row wrap mt-1" style="gap:8px"><span class="t-caption">▶ 6 min</span><span class="tag tag-stage">Etapa 3</span></div>
+              </div>
+              <button class="btn btn-secondary btn-sm">Ver</button>
+            </div>
+            <!-- Recurso bloqueado Etapa 5 -->
+            <div class="row-between" style="padding:14px 0">
+              <div>
+                <div class="t-label-bold" style="color:var(--texts-light)">Guardar vs. hacer crecer su plata</div>
+                <div class="row wrap mt-1" style="gap:8px"><span class="tag tag-stage">Etapa 5</span><span class="chip chip-coach">Próximamente con tu coach</span></div>
+              </div>
+              <button class="btn btn-secondary btn-sm" disabled>Ver</button>
+            </div>
+          </div>
+
+          <p class="muted-note mt-3">Estos recursos son del Skandia Channel, adaptados para acompañarte paso a paso.</p>
+          <div class="notice notice-info mt-2">
+            <span class="n-icon">🤝</span>
+            <span>Si prefieres aprender haciendo, también vas perfecto. No tienes que ver nada de esto para avanzar.</span>
+          </div>
+          <div class="btn-row"><button class="btn btn-tertiary" data-go="p04-home">Volver a mi tablero</button></div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           P09 · ACTIVACIÓN DE LA BILLETERA — CARA DEL PADRE (Etapa 2)
+           SOLO el lado del padre: activar / fondear / ver progreso.
+           NINGUNA interfaz del hijo (Fase 2).
+           ===================================================================== -->
+      <section class="screen" id="p09-billetera">
+        <div class="method-canvas">
+          <div class="bc"><a data-go="p04-home">El método</a><span class="sep">›</span><span>Etapa 2 · Plata propia</span></div>
+
+          <div class="card">
+            <div class="row wrap mb-2" style="gap:10px">
+              <span class="tag tag-stage">Etapa 2</span>
+              <span class="chip">Tu paso de esta semana</span>
+            </div>
+            <h1 class="t-h2 mb-2">Plata propia</h1>
+            <p class="t-body text-medium mb-3">Define con tu hijo un monto que será suyo para administrar — así sea pequeño — y actívale su billetera Kids desde tu portal para darle un lugar a esa plata.</p>
+
+            <!-- Cara del padre: activar/fondear -->
+            <div class="card card-grey">
+              <h2 class="t-h4 mb-1">Activa la billetera de Mariana</h2>
+              <p class="t-body text-medium mb-2">Aquí activas la billetera desde tu portal y definen juntos el acuerdo: cuánto, cada cuánto y qué entra en esa plata que ahora es suya.</p>
+
+              <div id="walletSetup">
+                <label class="t-label-bold" style="display:block;margin-bottom:6px">Monto inicial que será suyo</label>
+                <div class="row" style="gap:10px">
+                  <span class="chip chip-brand" data-amt>$ 20.000</span>
+                  <span class="chip" data-amt>$ 50.000</span>
+                  <span class="chip" data-amt>$ 100.000</span>
+                  <span class="chip" data-amt>Otro monto</span>
+                </div>
+                <p class="t-caption mt-2">El dinero saldrá de tu cuenta vinculada. 🟡 Origen del dinero y aviso legal: pendiente de validación con Legal (hereda Fase 2).</p>
+                <div class="btn-row">
+                  <button class="btn btn-primary" id="walletActivate">Activar billetera</button>
+                  <button class="btn btn-tertiary" data-go="p05-stage">Volver a la etapa</button>
+                </div>
+              </div>
+
+              <!-- Estado activado (cara del padre: ver progreso) -->
+              <div id="walletActive" style="display:none">
+                <div class="notice notice-info mb-3" style="background:var(--feedback-success-light);border-color:#bfead0;color:#0a7a1a">
+                  <span class="n-icon">✓</span>
+                  <span>Activaste la billetera de Mariana. Desde aquí podrás fondearla y ver cómo le va.</span>
+                </div>
+                <div class="grid-2">
+                  <div class="portal-widget">
+                    <p class="t-caption mb-1">Saldo de su billetera</p>
+                    <span class="balance-num" style="font-size:1.3rem">$ 50.000</span>
+                  </div>
+                  <div class="portal-widget">
+                    <p class="t-caption mb-1">Aportes este mes</p>
+                    <span class="balance-num" style="font-size:1.3rem">$ 50.000</span>
+                  </div>
+                </div>
+                <div class="btn-row">
+                  <button class="btn btn-secondary btn-sm" onclick="showToast('Fondeo','Esta función vive en el portal — fondeas desde tu cuenta vinculada.')">Fondear billetera</button>
+                  <button class="btn btn-tertiary" data-go="p04-home">Volver a mi tablero</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fase 2: interfaz del hijo, NO se diseña -->
+            <div class="notice notice-warn mt-3">
+              <span class="n-icon">🔒</span>
+              <span><strong>Próximamente (Fase 2).</strong> La forma en que Mariana verá y moverá su billetera —crear metas, hacer crecer su plata— llega en una próxima fase. Por ahora, el método se enfoca en lo que tú haces como su acompañante.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- TOAST global (sk-toast) -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span class="t-icon">✓</span>
+  <div><div class="t-title" id="toastTitle">Listo</div><div class="t-msg" id="toastMsg"></div></div>
+</div>
+
+<div class="proto-tag">Prototipo · Fase 1 · El Método (cara del padre)</div>
+
+<script>
+/* ============================================================================
+   NAVEGACIÓN ENTRE PANTALLAS — JS nativo, display none/block
+   ============================================================================ */
+function go(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var el=document.getElementById(id);
+  if(el){el.classList.add('active');}
+  // Sidebar: marcar activo el ítem del método cuando estamos dentro del método
+  var methodScreens=['p01-detail','p02-diag','p03-result','p04-home','p05-stage','p06-guion','p07-registro','p08-recursos','p09-billetera'];
+  var nav=document.getElementById('navMethod');
+  var home=document.querySelector('.nav-item[data-go="portal-home"]');
+  if(methodScreens.indexOf(id)>=0){nav.classList.add('active');if(home)home.classList.remove('active');}
+  else{nav.classList.remove('active');if(home)home.classList.add('active');}
+  document.querySelector('.portal-main').scrollTop=0;
+  window.scrollTo(0,0);
+}
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-go]');
+  if(t){e.preventDefault();go(t.getAttribute('data-go'));}
+});
+
+/* ============================================================================
+   DIAGNÓSTICO P02 — avance entre 4 preguntas + progressbar
+   ============================================================================ */
+(function(){
+  var current=1, total=4;
+  var nextBtn=document.getElementById('diagNext');
+  var backBtn=document.getElementById('diagBack');
+  var bar=document.getElementById('diagBar');
+  var lbl=document.getElementById('diagStepLabel');
+  function render(){
+    document.querySelectorAll('.diag-q').forEach(function(q){
+      q.style.display=(parseInt(q.dataset.q)===current)?'block':'none';
+    });
+    bar.style.width=(current/total*100)+'%';
+    lbl.textContent='Pregunta '+current+' de '+total;
+    nextBtn.textContent=(current===total)?'Ver mi punto de partida':'Siguiente';
+    backBtn.textContent=(current===1)?'Salir':'Atrás';
+  }
+  nextBtn.addEventListener('click',function(){
+    if(current<total){current++;render();}
+    else{go('p03-result');current=1;render();}
+  });
+  backBtn.addEventListener('click',function(){
+    if(current>1){current--;render();}
+    else{go('portal-home');}
+  });
+  render();
+})();
+
+/* ============================================================================
+   RADIOS — selección visual (diagnóstico y registro)
+   ============================================================================ */
+document.addEventListener('click',function(e){
+  var opt=e.target.closest('.radio-opt');
+  if(!opt)return;
+  var group=opt.closest('.radio-group');
+  if(!group)return;
+  group.querySelectorAll('.radio-opt').forEach(function(o){o.classList.remove('selected');});
+  opt.classList.add('selected');
+  // Habilitar guardar en P07
+  if(group.id==='registroOpts'){
+    var save=document.getElementById('registroSave');
+    if(save){save.disabled=false;save.dataset.result=opt.dataset.result;}
+  }
+});
+
+/* ============================================================================
+   ACCORDION
+   ============================================================================ */
+document.addEventListener('click',function(e){
+  var head=e.target.closest('.acc-head');
+  if(!head)return;
+  head.closest('.acc').classList.toggle('open');
+});
+
+/* ============================================================================
+   REGISTRO P07 — guardar y mostrar confirmación contextual
+   ============================================================================ */
+(function(){
+  var save=document.getElementById('registroSave');
+  if(!save)return;
+  var msgs={
+    'fluyó':{t:'Qué bueno.',m:'Diste un paso real con Mariana — de eso se trata todo esto.'},
+    'costó':{t:'Lo difícil también cuenta.',m:'De hecho, cuenta el doble. Lo importante es que lo intentaste.'},
+    'nose':{t:'No pasa nada.',m:'Estas conversaciones rara vez salen al primer intento. Cuando quieras, lo vuelves a probar — sin afán.'}
+  };
+  save.addEventListener('click',function(){
+    var r=save.dataset.result||'fluyó';
+    var data=msgs[r]||msgs['fluyó'];
+    document.getElementById('doneTitle').textContent=data.t;
+    document.getElementById('doneMsg').textContent=data.m;
+    document.getElementById('registroForm').style.display='none';
+    document.getElementById('registroDone').style.display='block';
+    showToast('Paso registrado','Gracias por contarnos cómo te fue.');
+    window.scrollTo(0,0);
+  });
+})();
+
+/* ============================================================================
+   BILLETERA P09 — montos + activación (cara del padre)
+   ============================================================================ */
+document.addEventListener('click',function(e){
+  var amt=e.target.closest('[data-amt]');
+  if(amt){
+    amt.parentNode.querySelectorAll('[data-amt]').forEach(function(c){c.classList.remove('chip-brand');});
+    amt.classList.add('chip-brand');
+  }
+});
+(function(){
+  var act=document.getElementById('walletActivate');
+  if(!act)return;
+  act.addEventListener('click',function(){
+    document.getElementById('walletSetup').style.display='none';
+    document.getElementById('walletActive').style.display='block';
+    showToast('Billetera activada','Activaste la billetera de Mariana.');
+  });
+})();
+
+/* ============================================================================
+   TOAST
+   ============================================================================ */
+var toastTimer;
+function showToast(title,msg){
+  document.getElementById('toastTitle').textContent=title;
+  document.getElementById('toastMsg').textContent=msg||'';
+  var t=document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove('show');},3800);
+}
+</script>
+</body>
+</html>
